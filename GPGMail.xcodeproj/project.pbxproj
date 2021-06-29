@@ -1,0 +1,605 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		07A9C664268B9FAC00333A29 /* GPGMailApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C663268B9FAC00333A29 /* GPGMailApp.swift */; };
+		07A9C666268B9FAC00333A29 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C665268B9FAC00333A29 /* ContentView.swift */; };
+		07A9C668268B9FAE00333A29 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07A9C667268B9FAE00333A29 /* Assets.xcassets */; };
+		07A9C66B268B9FAE00333A29 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07A9C66A268B9FAE00333A29 /* Preview Assets.xcassets */; };
+		07A9C675268B9FAE00333A29 /* GPGMailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C674268B9FAE00333A29 /* GPGMailTests.swift */; };
+		07A9C67F268B9FAE00333A29 /* GPGMailUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C67E268B9FAE00333A29 /* GPGMailUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		07A9C671268B9FAE00333A29 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 07A9C658268B9FAC00333A29 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 07A9C65F268B9FAC00333A29;
+			remoteInfo = GPGMail;
+		};
+		07A9C67B268B9FAE00333A29 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 07A9C658268B9FAC00333A29 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 07A9C65F268B9FAC00333A29;
+			remoteInfo = GPGMail;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		07A9C660268B9FAC00333A29 /* GPGMail.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPGMail.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		07A9C663268B9FAC00333A29 /* GPGMailApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPGMailApp.swift; sourceTree = "<group>"; };
+		07A9C665268B9FAC00333A29 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		07A9C667268B9FAE00333A29 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		07A9C66A268B9FAE00333A29 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		07A9C670268B9FAE00333A29 /* GPGMailTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPGMailTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		07A9C674268B9FAE00333A29 /* GPGMailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPGMailTests.swift; sourceTree = "<group>"; };
+		07A9C67A268B9FAE00333A29 /* GPGMailUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPGMailUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		07A9C67E268B9FAE00333A29 /* GPGMailUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPGMailUITests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		07A9C65D268B9FAC00333A29 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07A9C66D268B9FAE00333A29 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07A9C677268B9FAE00333A29 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		07A9C657268B9FAC00333A29 = {
+			isa = PBXGroup;
+			children = (
+				07A9C662268B9FAC00333A29 /* GPGMail */,
+				07A9C673268B9FAE00333A29 /* GPGMailTests */,
+				07A9C67D268B9FAE00333A29 /* GPGMailUITests */,
+				07A9C661268B9FAC00333A29 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		07A9C661268B9FAC00333A29 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				07A9C660268B9FAC00333A29 /* GPGMail.app */,
+				07A9C670268B9FAE00333A29 /* GPGMailTests.xctest */,
+				07A9C67A268B9FAE00333A29 /* GPGMailUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		07A9C662268B9FAC00333A29 /* GPGMail */ = {
+			isa = PBXGroup;
+			children = (
+				07A9C663268B9FAC00333A29 /* GPGMailApp.swift */,
+				07A9C665268B9FAC00333A29 /* ContentView.swift */,
+				07A9C667268B9FAE00333A29 /* Assets.xcassets */,
+				07A9C669268B9FAE00333A29 /* Preview Content */,
+			);
+			path = GPGMail;
+			sourceTree = "<group>";
+		};
+		07A9C669268B9FAE00333A29 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				07A9C66A268B9FAE00333A29 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		07A9C673268B9FAE00333A29 /* GPGMailTests */ = {
+			isa = PBXGroup;
+			children = (
+				07A9C674268B9FAE00333A29 /* GPGMailTests.swift */,
+			);
+			path = GPGMailTests;
+			sourceTree = "<group>";
+		};
+		07A9C67D268B9FAE00333A29 /* GPGMailUITests */ = {
+			isa = PBXGroup;
+			children = (
+				07A9C67E268B9FAE00333A29 /* GPGMailUITests.swift */,
+			);
+			path = GPGMailUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		07A9C65F268B9FAC00333A29 /* GPGMail */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 07A9C682268B9FAE00333A29 /* Build configuration list for PBXNativeTarget "GPGMail" */;
+			buildPhases = (
+				07A9C65C268B9FAC00333A29 /* Sources */,
+				07A9C65D268B9FAC00333A29 /* Frameworks */,
+				07A9C65E268B9FAC00333A29 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GPGMail;
+			productName = GPGMail;
+			productReference = 07A9C660268B9FAC00333A29 /* GPGMail.app */;
+			productType = "com.apple.product-type.application";
+		};
+		07A9C66F268B9FAE00333A29 /* GPGMailTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 07A9C685268B9FAE00333A29 /* Build configuration list for PBXNativeTarget "GPGMailTests" */;
+			buildPhases = (
+				07A9C66C268B9FAE00333A29 /* Sources */,
+				07A9C66D268B9FAE00333A29 /* Frameworks */,
+				07A9C66E268B9FAE00333A29 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				07A9C672268B9FAE00333A29 /* PBXTargetDependency */,
+			);
+			name = GPGMailTests;
+			productName = GPGMailTests;
+			productReference = 07A9C670268B9FAE00333A29 /* GPGMailTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		07A9C679268B9FAE00333A29 /* GPGMailUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 07A9C688268B9FAE00333A29 /* Build configuration list for PBXNativeTarget "GPGMailUITests" */;
+			buildPhases = (
+				07A9C676268B9FAE00333A29 /* Sources */,
+				07A9C677268B9FAE00333A29 /* Frameworks */,
+				07A9C678268B9FAE00333A29 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				07A9C67C268B9FAE00333A29 /* PBXTargetDependency */,
+			);
+			name = GPGMailUITests;
+			productName = GPGMailUITests;
+			productReference = 07A9C67A268B9FAE00333A29 /* GPGMailUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		07A9C658268B9FAC00333A29 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1300;
+				LastUpgradeCheck = 1300;
+				TargetAttributes = {
+					07A9C65F268B9FAC00333A29 = {
+						CreatedOnToolsVersion = 13.0;
+					};
+					07A9C66F268B9FAE00333A29 = {
+						CreatedOnToolsVersion = 13.0;
+						TestTargetID = 07A9C65F268B9FAC00333A29;
+					};
+					07A9C679268B9FAE00333A29 = {
+						CreatedOnToolsVersion = 13.0;
+						TestTargetID = 07A9C65F268B9FAC00333A29;
+					};
+				};
+			};
+			buildConfigurationList = 07A9C65B268B9FAC00333A29 /* Build configuration list for PBXProject "GPGMail" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 07A9C657268B9FAC00333A29;
+			productRefGroup = 07A9C661268B9FAC00333A29 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				07A9C65F268B9FAC00333A29 /* GPGMail */,
+				07A9C66F268B9FAE00333A29 /* GPGMailTests */,
+				07A9C679268B9FAE00333A29 /* GPGMailUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		07A9C65E268B9FAC00333A29 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07A9C66B268B9FAE00333A29 /* Preview Assets.xcassets in Resources */,
+				07A9C668268B9FAE00333A29 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07A9C66E268B9FAE00333A29 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07A9C678268B9FAE00333A29 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		07A9C65C268B9FAC00333A29 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07A9C666268B9FAC00333A29 /* ContentView.swift in Sources */,
+				07A9C664268B9FAC00333A29 /* GPGMailApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07A9C66C268B9FAE00333A29 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07A9C675268B9FAE00333A29 /* GPGMailTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07A9C676268B9FAE00333A29 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07A9C67F268B9FAE00333A29 /* GPGMailUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		07A9C672268B9FAE00333A29 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 07A9C65F268B9FAC00333A29 /* GPGMail */;
+			targetProxy = 07A9C671268B9FAE00333A29 /* PBXContainerItemProxy */;
+		};
+		07A9C67C268B9FAE00333A29 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 07A9C65F268B9FAC00333A29 /* GPGMail */;
+			targetProxy = 07A9C67B268B9FAE00333A29 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		07A9C680268B9FAE00333A29 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		07A9C681268B9FAE00333A29 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		07A9C683268B9FAE00333A29 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"GPGMail/Preview Content\"";
+				DEVELOPMENT_TEAM = D6AAJCLH87;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.olliespage.GPGMail;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		07A9C684268B9FAE00333A29 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"GPGMail/Preview Content\"";
+				DEVELOPMENT_TEAM = D6AAJCLH87;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.olliespage.GPGMail;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		07A9C686268B9FAE00333A29 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D6AAJCLH87;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.olliespage.GPGMailTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GPGMail.app/Contents/MacOS/GPGMail";
+			};
+			name = Debug;
+		};
+		07A9C687268B9FAE00333A29 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D6AAJCLH87;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.olliespage.GPGMailTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GPGMail.app/Contents/MacOS/GPGMail";
+			};
+			name = Release;
+		};
+		07A9C689268B9FAE00333A29 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D6AAJCLH87;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.olliespage.GPGMailUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = GPGMail;
+			};
+			name = Debug;
+		};
+		07A9C68A268B9FAE00333A29 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D6AAJCLH87;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.olliespage.GPGMailUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = GPGMail;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		07A9C65B268B9FAC00333A29 /* Build configuration list for PBXProject "GPGMail" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07A9C680268B9FAE00333A29 /* Debug */,
+				07A9C681268B9FAE00333A29 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		07A9C682268B9FAE00333A29 /* Build configuration list for PBXNativeTarget "GPGMail" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07A9C683268B9FAE00333A29 /* Debug */,
+				07A9C684268B9FAE00333A29 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		07A9C685268B9FAE00333A29 /* Build configuration list for PBXNativeTarget "GPGMailTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07A9C686268B9FAE00333A29 /* Debug */,
+				07A9C687268B9FAE00333A29 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		07A9C688268B9FAE00333A29 /* Build configuration list for PBXNativeTarget "GPGMailUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07A9C689268B9FAE00333A29 /* Debug */,
+				07A9C68A268B9FAE00333A29 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 07A9C658268B9FAC00333A29 /* Project object */;
+}
