@@ -21,12 +21,20 @@ class GPGDecoder {
     /// - Returns: True if this decoder can process the data further
     func shouldDecodeMessage(with data: Data) -> Bool {
         
-        guard let rawEml = String(data: data, encoding: .utf8),
-              let _ = rawEml.range(of: "-----BEGIN PGP MESSAGE-----") else {
+        guard let rawEml = String(data: data, encoding: .utf8) else {
             return false
         }
         
-        return true
+        if let _ = rawEml.range(of: "-----BEGIN PGP MESSAGE-----") {
+            return true
+        }
+        
+        let mimeMessage = Mime.parse(data: data)
+        if mimeMessage.contentType.type == "multipart" && mimeMessage.contentType.subtype == "encrypted" && mimeMessage.contentType.parameters["protocol"] == "application/pgp-encrypted" {
+            return true
+        }
+        
+        return false
     }
     
     /// Decode or validate the signature of an EML message
@@ -39,28 +47,22 @@ class GPGDecoder {
         var signingError: Error? = nil
         var decryptingError: Error? = nil
         
-        guard let rawEml = String(data: data, encoding: .utf8) else {
-            print("Unexected error decoding EML data -- This is fatal")
-            abort()
-        }
-        
-        if let range = rawEml.range(of: "-----BEGIN PGP MESSAGE-----") {
-            isEncrypted = true
-            let header = String(rawEml.prefix(upTo: range.lowerBound))
-            let body = String(rawEml.suffix(from: range.lowerBound))
+        let mimeMessage = Mime.parse(data: data)
+//        let original = Mime.write(data: data)
+//        print("Original: \(original.path)")
+        let bodyString = String(data: mimeMessage.body, encoding: .utf8)
+        if bodyString?.starts(with: "-----BEGIN PGP MESSAGE-----") ?? false {
             do {
-                return try decrypt(header: header, body: body)
+                return try decryptBody(of: mimeMessage)
             } catch {
                 decryptingError = error
             }
         }
-        
+
         return MEDecodedMessage(data: data, securityInformation: MEMessageSecurityInformation(signers: signers, isEncrypted: isEncrypted, signingError: signingError, encryptionError: decryptingError))
     }
     
-    func decrypt(header: String, body: String) throws -> MEDecodedMessage {
-        let bodyData = body.data(using: .utf8)
-
+    func decryptBody(of mimeMessage: MimeMessage) throws -> MEDecodedMessage {
         var signers: [MEMessageSigner] = []
         var signingError: Error? = nil
         var decodedMessage: MEDecodedMessage? = nil
@@ -73,7 +75,7 @@ class GPGDecoder {
             // gpgTask.addArgument("--homedir")
             // gpgTask.addArgument(userHomeDirectory)
             gpgTask.addArgument("-d")
-            gpgTask.setIn(bodyData)
+            gpgTask.setIn(mimeMessage.body)
             // gpgTask.addArgument(url.path)
             gpgTask.start() // We don't really care about the return code of GPG
             
@@ -85,7 +87,11 @@ class GPGDecoder {
                     let errorDetail = Signaure(details: sigError, key: nil)
                     let signer = MEMessageSigner(emailAddresses: [], signatureLabel: errorDetail.description(), context: nil)
                     signers.append(signer)
-                    signingError = MessageSecurityError.signatureError
+                    if errorDetail.status == GPGErrorNoPublicKey {
+                        signingError = MessageSecurityError.unknownSignature
+                    } else {
+                        signingError = MessageSecurityError.signatureError
+                    }
                 }
             }
             
@@ -106,9 +112,10 @@ class GPGDecoder {
             let securityInfo = MEMessageSecurityInformation(signers: signers, isEncrypted: true, signingError: signingError, encryptionError: nil)
             
             if let output = gpgTask.outText {
-                if let decrypted = header.appending(output).data(using: .utf8) {
-                    decodedMessage = MEDecodedMessage(data: decrypted, securityInformation: securityInfo)
-                }
+                let decrypted = MimeMessage(headers: mimeMessage.headers, body: output.data(using: .utf8)!)
+//                let _final = Mime.write(data: decrypted.raw)
+//                print("Final: \(_final.path)")
+                decodedMessage = MEDecodedMessage(data: decrypted.raw, securityInformation: securityInfo)
             }
         }
         print("Exception \(exception)")

@@ -7,15 +7,22 @@
 
 import Foundation
 
-enum MessageSecurityError: Error {
+enum MessageSecurityError: LocalizedError {
     case couldNotDecrypt
     case signatureError
-    var errorReason: String {
+    case unknownSignature
+    var errorDescription: String? {
         switch self {
         case .signatureError:
             return "Error verifying signature."
         case .couldNotDecrypt:
             return "Could not decrypt message"
+        case .unknownSignature:
+            return "Signed by unknown sender"
         }
+    }
+    
+    var failureReason: String? {
+        return errorDescription
     }
 }

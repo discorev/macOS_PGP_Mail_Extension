@@ -23,6 +23,7 @@
 		07A9C6C12690C84E00333A29 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C6C02690C84E00333A29 /* Errors.swift */; };
 		07A9C6C32690DE3700333A29 /* GPGDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C6C22690DE3700333A29 /* GPGDecoder.swift */; };
 		07A9C6C62690E46B00333A29 /* Signature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C6C52690E46B00333A29 /* Signature.swift */; };
+		07A9C6CD269104C700333A29 /* Mime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C6CC269104C700333A29 /* Mime.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +89,7 @@
 		07A9C6C02690C84E00333A29 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		07A9C6C22690DE3700333A29 /* GPGDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPGDecoder.swift; sourceTree = "<group>"; };
 		07A9C6C52690E46B00333A29 /* Signature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signature.swift; sourceTree = "<group>"; };
+		07A9C6CC269104C700333A29 /* Mime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mime.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,6 +188,7 @@
 		07A9C690268B9FF500333A29 /* GPGMailExtention */ = {
 			isa = PBXGroup;
 			children = (
+				07A9C6CB269104BA00333A29 /* Mime */,
 				07A9C6BB2690AF6500333A29 /* GPG */,
 				07A9C6AC268BAE4900333A29 /* GPGMailExtention.entitlements */,
 				07A9C691268B9FF500333A29 /* MailExtension.swift */,
@@ -224,6 +227,14 @@
 				07A9C69F268B9FF500333A29 /* MessageSecurityViewController.xib */,
 			);
 			path = "Message Security";
+			sourceTree = "<group>";
+		};
+		07A9C6CB269104BA00333A29 /* Mime */ = {
+			isa = PBXGroup;
+			children = (
+				07A9C6CC269104C700333A29 /* Mime.swift */,
+			);
+			path = Mime;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -297,6 +308,8 @@
 			dependencies = (
 			);
 			name = GPGMailExtention;
+			packageProductDependencies = (
+			);
 			productName = GPGMailExtention;
 			productReference = 07A9C68F268B9FF500333A29 /* GPGMailExtention.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -336,6 +349,8 @@
 				Base,
 			);
 			mainGroup = 07A9C657268B9FAC00333A29;
+			packageReferences = (
+			);
 			productRefGroup = 07A9C661268B9FAC00333A29 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -416,6 +431,7 @@
 				07A9C69C268B9FF500333A29 /* MessageSecurityHandler.swift in Sources */,
 				07A9C69E268B9FF500333A29 /* MessageSecurityViewController.swift in Sources */,
 				07A9C692268B9FF500333A29 /* MailExtension.swift in Sources */,
+				07A9C6CD269104C700333A29 /* Mime.swift in Sources */,
 				07A9C6C12690C84E00333A29 /* Errors.swift in Sources */,
 				07A9C6C32690DE3700333A29 /* GPGDecoder.swift in Sources */,
 			);

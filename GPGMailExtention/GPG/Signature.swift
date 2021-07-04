@@ -54,6 +54,6 @@ struct Signaure {
                 break;
         }
         
-        return "\(sigStatus) (\(fingerprint))"
+        return "\(sigStatus)"
     }
 }

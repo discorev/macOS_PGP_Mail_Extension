@@ -21,6 +21,9 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
 
     // MARK: - Encoding Messages
     
+    /// Check if a message being composed can be signed and or encrypted
+    /// - Parameter message: Message to check
+    /// - Returns:`MEOutgoingMessageEncodingStatus` showing if a message can be signed and or encrypted
     func encodingStatus(message: MEMessage) async -> MEOutgoingMessageEncodingStatus {
         var canSign = false, canEncrypt = false
         let keys = keys()
@@ -61,7 +64,13 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
         return MEOutgoingMessageEncodingStatus(canSign: canSign, canEncrypt: canEncrypt, securityError: nil, addressesFailingEncryption: failingEncryption)
     }
     
-    func encode(_ message: MEMessage, shouldSign: Bool, shouldEncrypt: Bool, completionHandler: ((MEMessageEncodingResult) -> Void)) {
+    /// Perform encryption and signing of the message
+    /// - Parameters:
+    ///   - message: Message to sign or encrypt
+    ///   - shouldSign: Indicates if the user selected / deselect the signing option
+    ///   - shouldEncrypt: Indicates if the user selected / deselected the encryption option
+    /// - Returns: The result of signing / encrypting
+    func encode(_ message: MEMessage, shouldSign: Bool, shouldEncrypt: Bool) async -> MEMessageEncodingResult {
         // The result of the encoding operation. This object contains
         // the encoded message or an error to indicate what failed.
         let result: MEMessageEncodingResult
@@ -80,10 +89,8 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
         // failed. If the message doesn't need to be encoded, pass nil,
         // otherwise pass an MEEncodedOutgoingMessage as shown above.
         result = MEMessageEncodingResult(encodedMessage: nil, signingError: nil, encryptionError: nil)
-      
-        // Call the completion handler with the result, or nil if
-        // the extension didn't attempt to encode the message at all.
-        completionHandler(result);
+        
+        return result
     }
           
     // MARK: - Decoding Messages
