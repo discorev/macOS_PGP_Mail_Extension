@@ -20,17 +20,33 @@ class GPGDecoder {
     /// - Parameter data: The EML message as data
     /// - Returns: True if this decoder can process the data further
     func shouldDecodeMessage(with data: Data) -> Bool {
+        let mimeMessage = Mime.Part(from: data)
         
-        guard let rawEml = String(data: data, encoding: .utf8) else {
-            return false
-        }
-        
-        if let _ = rawEml.range(of: "-----BEGIN PGP MESSAGE-----") {
+        // Check if the content type is a multi-part encrypted email
+        if mimeMessage.contentType?.type == "multipart" && mimeMessage.contentType?.subtype == "encrypted" && mimeMessage.contentType?.parameters["protocol"] == "application/pgp-encrypted" {
             return true
         }
         
-        let mimeMessage = Mime.parse(data: data)
-        if mimeMessage.contentType.type == "multipart" && mimeMessage.contentType.subtype == "encrypted" && mimeMessage.contentType.parameters["protocol"] == "application/pgp-encrypted" {
+        // Check if the content type is a multi-part signed email
+        if mimeMessage.contentType?.type == "multipart" && mimeMessage.contentType?.subtype == "signed" && mimeMessage.contentType?.parameters["protocol"] == "application/pgp-signature" {
+            return true
+        }
+        
+        // Now see if we can decode the body to a string
+        guard let body = String(data: mimeMessage.body, encoding: .utf8) else {
+            return false
+        }
+        
+        // Check if there is an armoured encrypted message in the body
+        if let _ = body.range(of: "-----BEGIN PGP MESSAGE-----"),
+           let _ = body.range(of: "-----END PGP MESSAGE-----") {
+            return true
+        }
+        
+        // Check if there is the correct armour for a pgp signed message
+        if let _ = body.range(of: "-----BEGIN PGP SIGNED MESSAGE-----"),
+           let _ = body.range(of: "-----BEGIN PGP SIGNATURE-----"),
+           let _ = body.range(of: "-----END PGP SIGNATURE-----") {
             return true
         }
         
@@ -42,87 +58,255 @@ class GPGDecoder {
     /// - Returns: A decrypted message
     func decodedMessage(from data: Data) -> MEDecodedMessage {
         // Declare the data needed for MEMessageSecurityInformation
-        var signers: [MEMessageSigner] = []
-        var isEncrypted: Bool = false
         var signingError: Error? = nil
         var decryptingError: Error? = nil
         
-        let mimeMessage = Mime.parse(data: data)
-//        let original = Mime.write(data: data)
-//        print("Original: \(original.path)")
-        let bodyString = String(data: mimeMessage.body, encoding: .utf8)
+        let mime = Mime.Part(from: data)
+        
+        if mime.isMultipart {
+            do {
+                if let result = try handleMultipart(mime) {
+                    return result
+                }
+            }
+            catch {
+                decryptingError = error
+            }
+            
+            return MEDecodedMessage(data: data, securityInformation: MEMessageSecurityInformation(signers: [], isEncrypted: false, signingError: signingError, encryptionError: decryptingError))
+        }
+        
+        let bodyString = String(data: mime.body, encoding: .utf8)
         if bodyString?.starts(with: "-----BEGIN PGP MESSAGE-----") ?? false {
             do {
-                return try decryptBody(of: mimeMessage)
+                let response = try decrypt(body: mime.body)
+                if let bodyData = response.rawData {
+                    let final = MimeMessage(headers: mime.headers, body: bodyData)
+                    return MEDecodedMessage(data: final.raw, securityInformation: response.securityInformation)
+                }
+                
             } catch {
                 decryptingError = error
             }
         }
+        
+        if let _ = bodyString?.range(of: "-----BEGIN PGP SIGNED MESSAGE-----"),
+           let _ = bodyString?.range(of: "-----BEGIN PGP SIGNATURE-----"),
+           let _ = bodyString?.range(of: "-----END PGP SIGNATURE-----") {
+            do {
+                if let result = try verify(body: mime.body) {
+                    return result
+                }
+            }
+            catch {
+                signingError = error
+            }
+        }
 
-        return MEDecodedMessage(data: data, securityInformation: MEMessageSecurityInformation(signers: signers, isEncrypted: isEncrypted, signingError: signingError, encryptionError: decryptingError))
+        return MEDecodedMessage(data: data, securityInformation: MEMessageSecurityInformation(signers: [], isEncrypted: false, signingError: signingError, encryptionError: decryptingError))
     }
     
-    func decryptBody(of mimeMessage: MimeMessage) throws -> MEDecodedMessage {
-        var signers: [MEMessageSigner] = []
-        var signingError: Error? = nil
-        var decodedMessage: MEDecodedMessage? = nil
+    func verify(body data: Data) throws -> MEDecodedMessage? {
+        let gpgTask = GPGTask()
+        gpgTask.nonBlocking = false
+        gpgTask.addArgument("--verify")
+        gpgTask.setIn(data)
 
         // This block will prevent swift crashing the application if an NSException is thrown
         // from the Objective-c side fo things
         let exception = tryBlock {
-            let gpgTask = GPGTask()
-            gpgTask.nonBlocking = false
-            // gpgTask.addArgument("--homedir")
-            // gpgTask.addArgument(userHomeDirectory)
-            gpgTask.addArgument("-d")
-            gpgTask.setIn(mimeMessage.body)
-            // gpgTask.addArgument(url.path)
             gpgTask.start() // We don't really care about the return code of GPG
-            
-            print("\(gpgTask.errText)")
-            
-            // Look for any bad signers
-            if let signatureErrors = gpgTask.statusDict["ERRSIG"] as? Array<Array<String>> {
-                for sigError in signatureErrors {
-                    let errorDetail = Signaure(details: sigError, key: nil)
-                    let signer = MEMessageSigner(emailAddresses: [], signatureLabel: errorDetail.description(), context: nil)
-                    signers.append(signer)
-                    if errorDetail.status == GPGErrorNoPublicKey {
-                        signingError = MessageSecurityError.unknownSignature
-                    } else {
-                        signingError = MessageSecurityError.signatureError
-                    }
-                }
-            }
-            
-            // And also for any good ones
-            if let goodSigs = gpgTask.statusDict["GOODSIG"] as? Array<Array<String>> {
-                let keys = self.keys()
-                for sigDetails in goodSigs {
-                    if let key = keys.first(where: { $0.keyID == sigDetails[0] }) {
-                        let emails = (key.userIDs as! [GPGUserID]).map { MEEmailAddress(rawString: $0.email) }
-                        let name = key.primaryUserID.name!
-                        let signer = MEMessageSigner(emailAddresses: emails, signatureLabel: name, context: nil)
-                        signers.append(signer)
-                    }
-                }
-            }
-            
-            // Build a security info object with the signers information
-            let securityInfo = MEMessageSecurityInformation(signers: signers, isEncrypted: true, signingError: signingError, encryptionError: nil)
-            
-            if let output = gpgTask.outText {
-                let decrypted = MimeMessage(headers: mimeMessage.headers, body: output.data(using: .utf8)!)
-//                let _final = Mime.write(data: decrypted.raw)
-//                print("Final: \(_final.path)")
-                decodedMessage = MEDecodedMessage(data: decrypted.raw, securityInformation: securityInfo)
+        }
+        
+        if let exception = exception {
+            print("Exception: \(exception)")
+            return nil
+        }
+        
+        let securityInformation = getSignerData(forTask: gpgTask, wasEncrypted: false)
+        
+        return MEDecodedMessage(data: gpgTask.outData(), securityInformation: securityInformation)
+    }
+    
+    func decrypt(body data: Data) throws -> MEDecodedMessage {
+        var decodedMessage: MEDecodedMessage? = nil
+        
+        let gpgTask = GPGTask()
+        gpgTask.nonBlocking = false
+        gpgTask.addArgument("-d")
+        gpgTask.setIn(data)
+
+        // This block will prevent swift crashing the application if an NSException is thrown
+        // from the Objective-c side fo things
+        let exception = tryBlock {
+            gpgTask.start() // We don't really care about the return code of GPG
+        }
+        print("Exception \(String(describing: exception))")
+        print("\(String(describing: gpgTask.errText))")
+        
+        // Get the signer data from the task
+        let securityInfo = getSignerData(forTask: gpgTask, wasEncrypted: true)
+        
+        if let output = gpgTask.outText {
+            if let decrypted = output.data(using: .utf8) {
+                decodedMessage = MEDecodedMessage(data: decrypted, securityInformation: securityInfo)
             }
         }
-        print("Exception \(exception)")
+        
         guard let decodedMessage = decodedMessage else {
             throw MessageSecurityError.couldNotDecrypt
         }
 
         return decodedMessage
+    }
+    
+    // To handle a multipart mime message: (1) decrypt the encrypted content
+    // 2 check if the new content is multipart also, if so, change the multipart header over?
+    func handleMultipart(_ mime: Mime.Part, wasEncrypted: Bool = false) throws -> MEDecodedMessage? {
+        if mime.contentType?.subtype == "signed" && mime.contentType?.parameters["protocol"] == "application/pgp-signature",
+           let algorithm = mime.contentType?.parameters["micalg"]  {
+            return try verifyMultipart(mime, algorithm: algorithm, wasEncrypted: wasEncrypted)
+        }
+        
+        guard var iterator: Mime.Part.Iterator = mime.iterator() else {
+            return nil
+        }
+        
+        var pgpEncrypted = false
+        var result: MEDecodedMessage?
+        while let part = iterator.next() {
+            if part.contentType?.subtype == "pgp-encrypted" {
+                // validate body
+                if part.body == "Version: 1\n\n".data(using: .ascii)! {
+                    pgpEncrypted = true
+                }
+                continue
+            }
+            
+            if pgpEncrypted {
+                let response = try decrypt(body: part.body)
+                if let bodyData = response.rawData {
+                    // Handle the fact that EMLs are CRLF
+                    if let stringPart = String(data: bodyData, encoding: .utf8) {
+                        let bodyText = stringPart.replacingOccurrences(of: "\r\n", with: "\n")
+                    
+                        result = MEDecodedMessage(data: bodyText.data(using: .utf8), securityInformation: response.securityInformation)
+                    }
+                    
+                    let bodyMime = Mime.Part(from: bodyData)
+                    if bodyMime.isMultipart {
+                        if let nextLevel = try handleMultipart(bodyMime, wasEncrypted: true) {
+                            result = nextLevel
+                        }
+                    }
+                }
+            }
+        }
+        return result
+    }
+    
+    
+    func verifyMultipart(_ mime: Mime.Part, algorithm: String, wasEncrypted: Bool) throws -> MEDecodedMessage? {
+        var dataPart: Mime.Part?
+        var dataUrl: URL? = nil
+        var signatureData: Data?
+        
+        guard var iterator: Mime.Part.Iterator = mime.iterator() else {
+            return nil
+        }
+        
+        while let part = iterator.next() {
+            if part.contentType?.subtype == "pgp-signature" {
+                signatureData = Data(part.body)
+                continue
+            }
+            
+            let lastCharacters = part.raw[(part.raw.endIndex-2)...]
+            
+            // Strip final whitespace
+            if lastCharacters == Data([0xD, 0xA]) {
+                dataUrl = Mime.write(data: Data(part.raw[..<(part.raw.endIndex-2)]))
+            } else if lastCharacters.last! == 0xA {
+                dataUrl = Mime.write(data: Data(part.raw[..<(part.raw.endIndex-1)]))
+            } else {
+                dataUrl = Mime.write(data: part.raw)
+            }
+            
+            dataPart = part
+        }
+        
+        guard let dataUrl = dataUrl,
+              let signatureData = signatureData else {
+            return nil
+        }
+        
+        let gpgTask = GPGTask()
+        gpgTask.nonBlocking = false
+        gpgTask.setIn(signatureData)
+        gpgTask.addArgument("--verify")
+        gpgTask.addArgument("-")
+        gpgTask.addArgument(dataUrl.path)
+
+        // This block will prevent swift crashing the application if an NSException is thrown
+        // from the Objective-c side fo things
+        let exception = tryBlock {
+            gpgTask.start() // We don't really care about the return code of GPG
+        }
+        
+        // Tidy up the dataUrl and supress any errors
+        try? FileManager.default.removeItem(at: dataUrl)
+        
+        
+        if let exception = exception {
+            print("Exception: \(exception)")
+            return nil
+        }
+        
+        let securityInformation = getSignerData(forTask: gpgTask, wasEncrypted: true)
+        if let dataPart = dataPart,
+           let stringPart = String(data: dataPart.raw, encoding: .utf8) {
+            
+            let response = stringPart.replacingOccurrences(of: "\r\n", with: "\n")
+            return MEDecodedMessage(data: response.data(using: .utf8), securityInformation: securityInformation)
+        }
+        return MEDecodedMessage(data: dataPart?.raw, securityInformation: securityInformation)
+    }
+    
+    func getSignerData(forTask gpgTask: GPGTask, wasEncrypted: Bool) -> MEMessageSecurityInformation {
+        var signers: [MEMessageSigner] = []
+        var signingError: Error? = nil
+
+        if let signatureErrors = gpgTask.statusDict["ERRSIG"] as? Array<Array<String>> {
+            for sigError in signatureErrors {
+                let errorDetail = BadSignaure(details: sigError, key: nil)
+                let signer = MEMessageSigner(emailAddresses: [], signatureLabel: errorDetail.description(), context: nil)
+                signers.append(signer)
+                if errorDetail.status == GPGErrorNoPublicKey {
+                    signingError = MessageSecurityError.unknownSignature
+                } else {
+                    signingError = MessageSecurityError.signatureError
+                }
+            }
+        } else if let validSigs = gpgTask.statusDict["VALIDSIG"] as? Array<Array<String>> {
+            let keys = self.keys()
+            let encoder = JSONEncoder()
+            for sig in validSigs {
+                let sigDetail = ValidSignature(detail: sig)
+                // check if the key exists in keys?
+                if let key = keys.first(where: { $0.fingerprint == sigDetail.fingerprint }) {
+                    let emails = (key.userIDs as! [GPGUserID]).map { MEEmailAddress(rawString: $0.email) }
+                    let name = key.primaryUserID.name!
+                    
+                    let encoded = try? encoder.encode(sigDetail)
+                    
+                    let signer = MEMessageSigner(emailAddresses: emails, signatureLabel: name, context: encoded)
+                    signers.append(signer)
+                } else {
+                    signingError = MessageSecurityError.unknownSignature
+                }
+            }
+        }
+        
+        return MEMessageSecurityInformation(signers: signers, isEncrypted: wasEncrypted, signingError: signingError, encryptionError: nil)
     }
 }
