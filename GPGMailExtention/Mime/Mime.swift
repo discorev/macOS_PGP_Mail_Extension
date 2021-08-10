@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Mime {
+public struct Mime {
     public typealias HeaderCollection = [String: [String]]
     public static let CARRAGE_RETURN: UInt8 = 0xD
     public static let LINEFEED: UInt8 = 0xA
@@ -96,11 +96,11 @@ struct Mime {
         }
         
         /// Content Type header
-        struct ContentType: CustomStringConvertible {
-            let type: String
-            let subtype: String
-            let raw: String
-            let parameters: HeaderParameters
+        public struct ContentType: CustomStringConvertible {
+            public let type: String
+            public let subtype: String
+            public let raw: String
+            public let parameters: HeaderParameters
             
             public var charset: String? {
                 return parameters["charset"]
@@ -110,7 +110,7 @@ struct Mime {
                 return parameters["name"]
             }
             
-            var description: String {
+            public var description: String {
                 var desc = raw
                 for parameter in parameters {
                     desc += "; \(parameter.key)=\"\(parameter.value)\""
@@ -118,7 +118,7 @@ struct Mime {
                 return desc
             }
             
-            init(raw value: String) {
+            public init(raw value: String) {
                 raw = value
                 let contentTypeParts = value.split(separator: ";", omittingEmptySubsequences: true)
                 let typeData = contentTypeParts[0].split(separator: "/", maxSplits: 1, omittingEmptySubsequences: true)
@@ -157,12 +157,13 @@ struct Mime {
         }
     }
     
+    /// A structure representing a single mime part
     public struct Part {
-        struct Iterator: IteratorProtocol {
-            let data: Data
-            let boundary: String
-            let boundaryData: Data
-            var position: Data.Index = 0
+        public struct Iterator: IteratorProtocol {
+            private let data: Data
+            private let boundary: String
+            private let boundaryData: Data
+            private var position: Data.Index = 0
             
             init(data: Data, boundary: String) {
                 self.boundary = boundary
@@ -189,7 +190,9 @@ struct Mime {
                 }
             }
             
-            mutating func next() -> Mime.Part? {
+            /// Return the next part of a multi-part mime message
+            /// - Returns: a mime part of nil if there are no more parts
+            public mutating func next() -> Mime.Part? {
                 guard data.count > position else {
                     return nil
                 }
@@ -203,28 +206,39 @@ struct Mime {
                 return nil
             }
             
+            /// Advance the index pass end of line character(s)
+            /// - Parameters:
+            ///   - from: The starting point of the index, this should sit on a newline character
+            /// - Returns: The index of a point after a `LR` or `CRLF`
             private func nextLine(from index: Data.Index) -> Data.Index {
-                if data.count >= (index + 2) && data[index] == CARRAGE_RETURN && data[index + 1] == LINEFEED {
+                guard data.count > index + 1 else {
+                    return index
+                }
+                
+                if data.count >= (index + 2)
+                    && data[index] == CARRAGE_RETURN
+                    && data[index + 1] == LINEFEED {
                     return index + 2
                 }
+                
                 return index + 1
             }
         }
         
-        let raw: Data
-        let headers: HeaderCollection
-        let contentType: Headers.ContentType?
-        let contentDisposition: Headers.ContentDisposition?
+        public let raw: Data
+        public let headers: HeaderCollection
+        public let contentType: Headers.ContentType?
+        public let contentDisposition: Headers.ContentDisposition?
         private let bodyOffset: Data.Index
-        var body: Data {
+        public var body: Data {
             get {
                 return raw.advanced(by: bodyOffset)
             }
         }
-        let isMultipart: Bool
-        let boundary: String?
+        public let isMultipart: Bool
+        public let boundary: String?
         
-        func iterator() -> Mime.Part.Iterator? {
+        public func iterator() -> Mime.Part.Iterator? {
             guard isMultipart, let boundary = boundary else {
                 return nil
             }
@@ -232,10 +246,12 @@ struct Mime {
             return Mime.Part.Iterator(data: self.body, boundary: boundary)
         }
         
-        init(from data: Data) {
+        public init(from data: Data) {
             raw = Data(data)
             var headers: [String: [String]] = [:]
-            let eml = String(data: data, encoding: .ascii)!.replacingOccurrences(of: "\r\n", with: "\n")
+            // As utf8 is a superset of ascii this should always
+            // result in a readable stream
+            let eml = String(data: data, encoding: .utf8)!
             var fieldName: String? = nil
             var fieldValue: String = ""
             var offset: Int = 0
@@ -262,13 +278,18 @@ struct Mime {
                 }
             }
             
-            for line in eml.components(separatedBy: .newlines) {
-                offset += line.lengthOfBytes(using: .ascii) + 1
+            for line in eml.split(omittingEmptySubsequences: false, whereSeparator: \.isNewline) {
                 if line.isEmpty {
+                    // Move forward 1 character to move over the newline character
+                    // Then Get that index in the utf8 representation of the string
+                    let utf8Index = eml.index(after: line.endIndex).samePosition(in: eml.utf8)!
+                    // Calculate the int count from the start of the data
+                    offset = eml.utf8.distance(to: utf8Index)
                     break
                 }
+                
                 if let fieldName = fieldName {
-                    if line.prefix(1).rangeOfCharacter(from: .whitespaces) != nil {
+                    if line.first!.isWhitespace {
                         fieldValue += " \(line.trimmingCharacters(in: .whitespaces))"
                         continue
                     }
@@ -303,36 +324,10 @@ struct Mime {
         }
     }
 
-    static func write(data: Data) -> URL {
+    public static func write(data: Data) -> URL {
         let url = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString + ".eml")
 
         try? data.write(to: url)
         return url
-    }
-}
-
-
-class MimeMessage {
-    let headers: [String: [String]]
-    let body: Data
-
-    init(headers: Mime.HeaderCollection, body: Data) {
-        self.headers = headers
-        self.body = body
-    }
-    
-    var raw: Data {
-        get {
-            var fullData = Data()
-            for key in headers.keys {
-                for headerValue in headers[key]! {
-                    fullData.append("\(key): \(headerValue)\n".data(using: .ascii)!)
-                }
-            }
-            // Ensure an empty line after the headers
-            fullData.append(Mime.LINEFEED)
-            fullData.append(body)
-            return fullData
-        }
     }
 }

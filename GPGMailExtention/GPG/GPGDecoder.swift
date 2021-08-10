@@ -80,11 +80,13 @@ class GPGDecoder {
         if bodyString?.starts(with: "-----BEGIN PGP MESSAGE-----") ?? false {
             do {
                 let response = try decrypt(body: mime.body)
-                if let bodyData = response.rawData {
-                    let final = MimeMessage(headers: mime.headers, body: bodyData)
-                    return MEDecodedMessage(data: final.raw, securityInformation: response.securityInformation)
-                }
+                let mimeResponse = MimeWriter()
+                mimeResponse.headers = mime.headers
+                mimeResponse.set(body: response.rawData!)
+                // Ensure the content is sent formatted with \n for apple
+                let appleHack = String(data: mimeResponse.rawData, encoding: .utf8)!.replacingOccurrences(of: "\r\n", with: "\n").data(using: .utf8)!
                 
+                return MEDecodedMessage(data: appleHack, securityInformation: response.securityInformation)
             } catch {
                 decryptingError = error
             }
@@ -221,24 +223,42 @@ class GPGDecoder {
                 continue
             }
             
-            let lastCharacters = part.raw[(part.raw.endIndex-2)...]
-            
-            // Strip final whitespace
-            if lastCharacters == Data([0xD, 0xA]) {
-                dataUrl = Mime.write(data: Data(part.raw[..<(part.raw.endIndex-2)]))
-            } else if lastCharacters.last! == 0xA {
-                dataUrl = Mime.write(data: Data(part.raw[..<(part.raw.endIndex-1)]))
-            } else {
-                dataUrl = Mime.write(data: part.raw)
+            guard dataUrl == nil else {
+                continue
             }
             
+            let rawData = part.raw
+            let lastAddressableIndex = rawData.index(before: rawData.endIndex)
+            
+            // Walk backward from the end of the data to remove
+            // Extra end of line characters
+            var currentIndex = lastAddressableIndex
+            while [0xD, 0xA].contains(rawData[currentIndex]) {
+                currentIndex = rawData.index(before: currentIndex)
+            }
+            
+            // currentIndex now points to the first non-end-of-line character
+            // from the end of the string
+            if currentIndex < lastAddressableIndex {
+                currentIndex = rawData.index(after: currentIndex)
+                if rawData[currentIndex] == 0xD && currentIndex < lastAddressableIndex {
+                    currentIndex = rawData.index(after: currentIndex)
+                }
+            }
+            
+            dataUrl = Mime.write(data: rawData[...currentIndex])
             dataPart = part
         }
         
         guard let dataUrl = dataUrl,
               let signatureData = signatureData else {
-            return nil
-        }
+                  // Clean up the data file to prevent littering
+                  if let dataUrl = dataUrl {
+                      try? FileManager.default.removeItem(at: dataUrl)
+                  }
+                  
+                  return nil
+              }
         
         let gpgTask = GPGTask()
         gpgTask.nonBlocking = false
@@ -262,7 +282,7 @@ class GPGDecoder {
             return nil
         }
         
-        let securityInformation = getSignerData(forTask: gpgTask, wasEncrypted: true)
+        let securityInformation = getSignerData(forTask: gpgTask, wasEncrypted: wasEncrypted)
         if let dataPart = dataPart,
            let stringPart = String(data: dataPart.raw, encoding: .utf8) {
             
@@ -304,6 +324,13 @@ class GPGDecoder {
                 } else {
                     signingError = MessageSecurityError.unknownSignature
                 }
+            }
+        } else if let badSigs = gpgTask.statusDict["BADSIG"] as? Array<Array<String>> {
+            signingError = MessageSecurityError.badSignature
+            for sig in badSigs {
+                let name = "\(sig[1]) \(sig[2])"
+                let email = MEEmailAddress(rawString: sig[3])
+                signers.append(MEMessageSigner(emailAddresses: [email], signatureLabel: name, context: nil))
             }
         }
         

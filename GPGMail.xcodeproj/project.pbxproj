@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0701A25226C1C073009C612B /* KeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701A25126C1C073009C612B /* KeyManager.swift */; };
+		0702823226C078D300E22970 /* GPGEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0702823126C078D300E22970 /* GPGEncoder.swift */; };
+		0702823526C09F2E00E22970 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0702823426C09F2E00E22970 /* Collection.swift */; };
+		0759D15526BB12E70029D438 /* MimeWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0759D15426BB12E70029D438 /* MimeWriter.swift */; };
 		07A9C664268B9FAC00333A29 /* GPGMailApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C663268B9FAC00333A29 /* GPGMailApp.swift */; };
 		07A9C666268B9FAC00333A29 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C665268B9FAC00333A29 /* ContentView.swift */; };
 		07A9C668268B9FAE00333A29 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07A9C667268B9FAE00333A29 /* Assets.xcassets */; };
@@ -65,6 +69,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0701A25126C1C073009C612B /* KeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyManager.swift; sourceTree = "<group>"; };
+		0702823126C078D300E22970 /* GPGEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPGEncoder.swift; sourceTree = "<group>"; };
+		0702823426C09F2E00E22970 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
+		0759D15426BB12E70029D438 /* MimeWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MimeWriter.swift; sourceTree = "<group>"; };
 		07A9C660268B9FAC00333A29 /* GPGMail.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPGMail.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07A9C663268B9FAC00333A29 /* GPGMailApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPGMailApp.swift; sourceTree = "<group>"; };
 		07A9C665268B9FAC00333A29 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -126,6 +134,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0702823326C09F1900E22970 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				0702823426C09F2E00E22970 /* Collection.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		07A9C657268B9FAC00333A29 = {
 			isa = PBXGroup;
 			children = (
@@ -188,6 +204,7 @@
 		07A9C690268B9FF500333A29 /* GPGMailExtention */ = {
 			isa = PBXGroup;
 			children = (
+				0702823326C09F1900E22970 /* Extensions */,
 				07A9C6CB269104BA00333A29 /* Mime */,
 				07A9C6BB2690AF6500333A29 /* GPG */,
 				07A9C6AC268BAE4900333A29 /* GPGMailExtention.entitlements */,
@@ -215,6 +232,8 @@
 				07A9C6C02690C84E00333A29 /* Errors.swift */,
 				07A9C6C22690DE3700333A29 /* GPGDecoder.swift */,
 				07A9C6C52690E46B00333A29 /* Signature.swift */,
+				0702823126C078D300E22970 /* GPGEncoder.swift */,
+				0701A25126C1C073009C612B /* KeyManager.swift */,
 			);
 			path = GPG;
 			sourceTree = "<group>";
@@ -233,6 +252,7 @@
 			isa = PBXGroup;
 			children = (
 				07A9C6CC269104C700333A29 /* Mime.swift */,
+				0759D15426BB12E70029D438 /* MimeWriter.swift */,
 			);
 			path = Mime;
 			sourceTree = "<group>";
@@ -427,6 +447,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0759D15526BB12E70029D438 /* MimeWriter.swift in Sources */,
+				0702823526C09F2E00E22970 /* Collection.swift in Sources */,
+				0702823226C078D300E22970 /* GPGEncoder.swift in Sources */,
+				0701A25226C1C073009C612B /* KeyManager.swift in Sources */,
 				07A9C6C62690E46B00333A29 /* Signature.swift in Sources */,
 				07A9C69C268B9FF500333A29 /* MessageSecurityHandler.swift in Sources */,
 				07A9C69E268B9FF500333A29 /* MessageSecurityViewController.swift in Sources */,
