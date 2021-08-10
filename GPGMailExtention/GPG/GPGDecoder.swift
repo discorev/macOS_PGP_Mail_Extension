@@ -313,7 +313,7 @@ class GPGDecoder {
             for sig in validSigs {
                 let sigDetail = ValidSignature(detail: sig)
                 // check if the key exists in keys?
-                if let key = keys.first(where: { $0.fingerprint == sigDetail.fingerprint }) {
+                if let key = keys.first(where: { $0.fingerprint == sigDetail.fingerprint || $0.fingerprint == sigDetail.primaryKeyFingerpring }) {
                     let emails = (key.userIDs as! [GPGUserID]).map { MEEmailAddress(rawString: $0.email) }
                     let name = key.primaryUserID.name!
                     
