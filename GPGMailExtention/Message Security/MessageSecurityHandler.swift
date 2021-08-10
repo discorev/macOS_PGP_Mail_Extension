@@ -79,10 +79,11 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
             return MEMessageEncodingResult(encodedMessage: nil, signingError: signingError, encryptionError: encryptionError)
         }
         
+        // TODO: REMOVE THIS
+        // Cope with the fact apple needs the eml as LF only line endings
         let emlString = String(data: encodedMessage, encoding: .utf8)!
-        
         let encoded = emlString.replacingOccurrences(of: "\r\n", with: "\n").data(using: .utf8)!
-        
+                
         let outgoingMessage = MEEncodedOutgoingMessage(rawData: encoded, isSigned: shouldSign && (signingError == nil), isEncrypted: shouldEncrypt && (encryptionError == nil))
         
         return MEMessageEncodingResult(encodedMessage: outgoingMessage, signingError: signingError, encryptionError: encryptionError)

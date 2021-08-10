@@ -84,6 +84,7 @@ class GPGDecoder {
                 mimeResponse.headers = mime.headers
                 mimeResponse.set(body: response.rawData!)
                 // Ensure the content is sent formatted with \n for apple
+                // TODO: REMOVE THIS
                 let appleHack = String(data: mimeResponse.rawData, encoding: .utf8)!.replacingOccurrences(of: "\r\n", with: "\n").data(using: .utf8)!
                 
                 return MEDecodedMessage(data: appleHack, securityInformation: response.securityInformation)
@@ -179,6 +180,7 @@ class GPGDecoder {
         while let part = iterator.next() {
             if part.contentType?.subtype == "pgp-encrypted" {
                 // validate body
+                // TODO: This should be \r\n\r\n
                 if part.body == "Version: 1\n\n".data(using: .ascii)! {
                     pgpEncrypted = true
                 }
@@ -189,6 +191,7 @@ class GPGDecoder {
                 let response = try decrypt(body: part.body)
                 if let bodyData = response.rawData {
                     // Handle the fact that EMLs are CRLF
+                    // TODO: REMOVE THIS
                     if let stringPart = String(data: bodyData, encoding: .utf8) {
                         let bodyText = stringPart.replacingOccurrences(of: "\r\n", with: "\n")
                     
@@ -285,7 +288,7 @@ class GPGDecoder {
         let securityInformation = getSignerData(forTask: gpgTask, wasEncrypted: wasEncrypted)
         if let dataPart = dataPart,
            let stringPart = String(data: dataPart.raw, encoding: .utf8) {
-            
+            // TODO: REMOVE THIS
             let response = stringPart.replacingOccurrences(of: "\r\n", with: "\n")
             return MEDecodedMessage(data: response.data(using: .utf8), securityInformation: securityInformation)
         }

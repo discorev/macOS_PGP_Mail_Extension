@@ -20,8 +20,10 @@ class GPGEncoder {
         
         // Handle the fact messageData is invalid:
         var messageString = String(data: messageData, encoding: .utf8)!
+        
+        // TODO: REMOVE THIS
+        // Fix apple changing the line endings
         messageString = messageString.replacingOccurrences(of: "\n", with: "\r\n")
-        // Fix any doubled line endings
         messageString = messageString.replacingOccurrences(of: "\r\r", with: "\r")
         
         return try sign(rawData: messageString.data(using: .utf8)!, with: signingKey)
