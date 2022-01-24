@@ -39,6 +39,10 @@ class GPGEncoder {
         if let contentType = mime.contentType {
             _ = messagePart.add(header: "Content-Type", value: contentType.raw)
         }
+        // This is an important header to ensure gets preserved as it makes sure quote-printable etc. get passed along
+        if let contentTransferEncoding = mime.headers["Content-Transfer-Encoding"]?.first {
+            _ = messagePart.add(header: "Content-Transfer-Encoding", value: contentTransferEncoding)
+        }
         messagePart.set(body: mime.body)
         // let messageData = messagePart.raw.dropLast(2)
 
