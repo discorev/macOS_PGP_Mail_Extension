@@ -251,7 +251,7 @@ public struct Mime {
             var headers: [String: [String]] = [:]
             // As utf8 is a superset of ascii this should always
             // result in a readable stream
-            let eml = String(data: data, encoding: .utf8)!
+            let eml = String(decoding: data, as: UTF8.self)
             var fieldName: String? = nil
             var fieldValue: String = ""
             var offset: Int = 0
@@ -280,6 +280,9 @@ public struct Mime {
             
             for line in eml.split(omittingEmptySubsequences: false, whereSeparator: \.isNewline) {
                 if line.isEmpty {
+                    guard line.endIndex < eml.endIndex else {
+                        break
+                    }
                     // Move forward 1 character to move over the newline character
                     // Then Get that index in the utf8 representation of the string
                     let utf8Index = eml.index(after: line.endIndex).samePosition(in: eml.utf8)!
