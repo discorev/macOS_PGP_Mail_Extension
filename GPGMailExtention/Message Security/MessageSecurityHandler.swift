@@ -11,11 +11,11 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
     static let shared = MessageSecurityHandler()
 
     // MARK: - Encoding Messages
-    
+
     /// Check if a message being composed can be signed and or encrypted
     /// - Parameter message: Message to check
     /// - Returns:`MEOutgoingMessageEncodingStatus` showing if a message can be signed and or encrypted
-    func encodingStatus(message: MEMessage) async -> MEOutgoingMessageEncodingStatus {
+    func encodingStatus(for message: MEMessage, composeContext: MEComposeContext) async -> MEOutgoingMessageEncodingStatus {
         var canSign = false, canEncrypt = false
         
         // Is there a valid signing key for the fromAddress?
@@ -46,13 +46,13 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
     ///   - shouldSign: Indicates if the user selected / deselect the signing option
     ///   - shouldEncrypt: Indicates if the user selected / deselected the encryption option
     /// - Returns: The result of signing / encrypting
-    func encode(_ message: MEMessage, shouldSign: Bool, shouldEncrypt: Bool) async -> MEMessageEncodingResult {
+    func encode(_ message: MEMessage, composeContext: MEComposeContext) async -> MEMessageEncodingResult {
         var signingError: Error? = nil
         var encryptionError: Error? = nil
         var encodedMessage: Data? = nil
         
         // get the signing key
-        if shouldSign {
+        if composeContext.shouldSign {
             do {
                 encodedMessage = try GPGEncoder.sign(message: message)
             } catch {
@@ -60,7 +60,7 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
             }
         }
         
-        if shouldEncrypt {
+        if composeContext.shouldEncrypt {
             var data: Data
             if encodedMessage != nil {
                 data = encodedMessage!
@@ -84,7 +84,7 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
         let emlString = String(data: encodedMessage, encoding: .utf8)!
         let encoded = emlString.replacingOccurrences(of: "\r\n", with: "\n").data(using: .utf8)!
                 
-        let outgoingMessage = MEEncodedOutgoingMessage(rawData: encoded, isSigned: shouldSign && (signingError == nil), isEncrypted: shouldEncrypt && (encryptionError == nil))
+        let outgoingMessage = MEEncodedOutgoingMessage(rawData: encoded, isSigned: composeContext.shouldSign && (signingError == nil), isEncrypted: composeContext.shouldEncrypt && (encryptionError == nil))
         
         return MEMessageEncodingResult(encodedMessage: outgoingMessage, signingError: signingError, encryptionError: encryptionError)
     }
@@ -101,15 +101,33 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
             return nil
         }
         
-        return decoder.decodedMessage(from: data)
+        let result = decoder.decodedMessage(from: data)
+        
+        // TODO: Remove this hack
+        guard let resultData = result.rawData else {
+            return result
+        }
+        
+        var stringResult = String(decoding: resultData, as: UTF8.self)
+        stringResult = stringResult.replacingOccurrences(of: "\r\n", with: "\n")
+        
+        return MEDecodedMessage(data: stringResult.data(using: .utf8), securityInformation: result.securityInformation, context: nil)
     }
  
     // MARK: - Displaying Security Information
-    
     func extensionViewController(signers messageSigners: [MEMessageSigner]) -> MEExtensionViewController? {
-        // Return a view controller that shows details about the encoded message.
         let controller = MessageSecurityViewController.sharedInstance
         controller.signers = messageSigners
         return controller
+    }
+    
+    func extensionViewController(messageContext context: Data) -> MEExtensionViewController? {
+        let controller = MessageSecurityViewController.sharedInstance
+        // controller.signers = messageSigners
+        return controller
+    }
+    
+    func primaryActionClicked(forMessageContext context: Data) async -> MEExtensionViewController? {
+        return nil
     }
 }

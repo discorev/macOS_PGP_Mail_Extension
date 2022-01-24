@@ -73,7 +73,7 @@ class GPGDecoder {
                 decryptingError = error
             }
             
-            return MEDecodedMessage(data: data, securityInformation: MEMessageSecurityInformation(signers: [], isEncrypted: false, signingError: signingError, encryptionError: decryptingError))
+            return MEDecodedMessage(data: data, securityInformation: MEMessageSecurityInformation(signers: [], isEncrypted: false, signingError: signingError, encryptionError: decryptingError), context: nil)
         }
         
         let bodyString = String(data: mime.body, encoding: .utf8)
@@ -83,11 +83,7 @@ class GPGDecoder {
                 let mimeResponse = MimeWriter()
                 mimeResponse.headers = mime.headers
                 mimeResponse.set(body: response.rawData!)
-                // Ensure the content is sent formatted with \n for apple
-                // TODO: REMOVE THIS
-                let appleHack = String(data: mimeResponse.rawData, encoding: .utf8)!.replacingOccurrences(of: "\r\n", with: "\n").data(using: .utf8)!
-                
-                return MEDecodedMessage(data: appleHack, securityInformation: response.securityInformation)
+                return MEDecodedMessage(data: mimeResponse.rawData, securityInformation: response.securityInformation, context: nil)
             } catch {
                 decryptingError = error
             }
@@ -106,7 +102,7 @@ class GPGDecoder {
             }
         }
 
-        return MEDecodedMessage(data: data, securityInformation: MEMessageSecurityInformation(signers: [], isEncrypted: false, signingError: signingError, encryptionError: decryptingError))
+        return MEDecodedMessage(data: data, securityInformation: MEMessageSecurityInformation(signers: [], isEncrypted: false, signingError: signingError, encryptionError: decryptingError), context: nil)
     }
     
     func verify(body data: Data) throws -> MEDecodedMessage? {
@@ -128,7 +124,7 @@ class GPGDecoder {
         
         let securityInformation = getSignerData(forTask: gpgTask, wasEncrypted: false)
         
-        return MEDecodedMessage(data: gpgTask.outData(), securityInformation: securityInformation)
+        return MEDecodedMessage(data: gpgTask.outData(), securityInformation: securityInformation, context: nil)
     }
     
     func decrypt(body data: Data) throws -> MEDecodedMessage {
@@ -152,7 +148,7 @@ class GPGDecoder {
         
         if let output = gpgTask.outText {
             if let decrypted = output.data(using: .utf8) {
-                decodedMessage = MEDecodedMessage(data: decrypted, securityInformation: securityInfo)
+                decodedMessage = MEDecodedMessage(data: decrypted, securityInformation: securityInfo, context: nil)
             }
         }
         
@@ -190,13 +186,7 @@ class GPGDecoder {
             if pgpEncrypted {
                 let response = try decrypt(body: part.body)
                 if let bodyData = response.rawData {
-                    // Handle the fact that EMLs are CRLF
-                    // TODO: REMOVE THIS
-                    if let stringPart = String(data: bodyData, encoding: .utf8) {
-                        let bodyText = stringPart.replacingOccurrences(of: "\r\n", with: "\n")
-                    
-                        result = MEDecodedMessage(data: bodyText.data(using: .utf8), securityInformation: response.securityInformation)
-                    }
+                    result = MEDecodedMessage(data: bodyData, securityInformation: response.securityInformation, context: nil)
                     
                     let bodyMime = Mime.Part(from: bodyData)
                     if bodyMime.isMultipart {
@@ -286,13 +276,8 @@ class GPGDecoder {
         }
         
         let securityInformation = getSignerData(forTask: gpgTask, wasEncrypted: wasEncrypted)
-        if let dataPart = dataPart,
-           let stringPart = String(data: dataPart.raw, encoding: .utf8) {
-            // TODO: REMOVE THIS
-            let response = stringPart.replacingOccurrences(of: "\r\n", with: "\n")
-            return MEDecodedMessage(data: response.data(using: .utf8), securityInformation: securityInformation)
-        }
-        return MEDecodedMessage(data: dataPart?.raw, securityInformation: securityInformation)
+
+        return MEDecodedMessage(data: dataPart?.raw, securityInformation: securityInformation, context: nil)
     }
     
     func getSignerData(forTask gpgTask: GPGTask, wasEncrypted: Bool) -> MEMessageSecurityInformation {
