@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan · Getting GPGMail working again on macOS 27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF9F5; --card:#FFFFFF; --rule:#E6E1D6; --rule-strong:#D6CFC1;
+    --ink:#2A2620; --ink-soft:#615A4F; --ink-faint:#8D8576;
+    --accent:#D97757; --accent-wash:#FBEDE6; --olive:#788C5D; --olive-wash:#EEF2E8; --red:#B5523B;
+    --serif:"Newsreader",Georgia,serif; --sans:"Instrument Sans",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 var(--sans)}
+  main{max-width:980px;margin:0 auto;padding:56px 28px 96px}
+  h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;margin:0}
+  h1{font-size:44px;line-height:1.1;max-width:22ch}
+  h2{font-size:28px;margin-bottom:6px}
+  h3{font-size:20px}
+  p{margin:0 0 10px;max-width:72ch}
+  code{font:13px var(--mono);background:#F2EEE5;padding:1px 5px;border-radius:4px}
+  .eyebrow{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+  .lede{font-size:18px;color:var(--ink-soft);margin-top:14px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .chip{font:12px var(--mono);border:1px solid var(--rule-strong);background:var(--card);border-radius:999px;padding:5px 12px;color:var(--ink-soft)}
+  .chip b{color:var(--ink);font-weight:500}
+  section{margin-top:56px}
+  .section-intro{color:var(--ink-soft);margin-bottom:20px}
+  .card{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:20px 22px}
+
+  /* findings */
+  .findings{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .checks{list-style:none;margin:0;padding:0}
+  .checks li{position:relative;padding:7px 0 7px 28px;border-top:1px solid var(--rule)}
+  .checks li::before{position:absolute;left:2px}
+  .checks li:first-child{border-top:0}
+  .ok::before{content:"✓";color:var(--olive);font-weight:600}
+  .no::before{content:"✗";color:var(--red);font-weight:600}
+  .na::before{content:"→";color:var(--ink-faint)}
+
+  /* choice cards */
+  .choice{margin-bottom:16px}
+  .choice-head{display:flex;gap:12px;align-items:baseline;margin-bottom:12px}
+  .choice-id{font:500 12px var(--mono);color:var(--accent);min-width:26px}
+  .choice-why{color:var(--ink-soft);font-size:14.5px;margin:-4px 0 12px 38px}
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-left:38px}
+  .opt{all:unset;cursor:pointer;display:block;border:1px solid var(--rule);border-radius:10px;padding:14px 16px;background:#FDFCFA;font-size:14.5px;color:var(--ink-soft);position:relative}
+  .opt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .opt .tag{display:block;font:500 10.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px}
+  .opt strong{display:block;color:var(--ink);font-weight:600;margin-bottom:4px}
+  .opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash);color:var(--ink)}
+  .opt[aria-pressed="true"] .tag{color:var(--accent)}
+  .opt[aria-pressed="true"] .tag::after{content:" · selected"}
+  .weakest{border-left:4px solid var(--accent)}
+  .weakest .flag{font:500 11px var(--mono);color:var(--accent);margin-left:38px;margin-bottom:8px;display:block}
+
+  /* sequence */
+  .steps{display:grid;grid-template-columns:repeat(6,1fr);gap:0;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:var(--card)}
+  .step{padding:16px 14px;border-left:1px solid var(--rule);font-size:13.5px;color:var(--ink-soft)}
+  .step:first-child{border-left:0}
+  .step .n{font:500 12px var(--mono);color:var(--accent)}
+  .step h4{font:600 15px var(--sans);color:var(--ink);margin:4px 0 6px}
+  .step .who{font:11px var(--mono);color:var(--olive);margin-top:8px;display:block}
+
+  details.trust{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:0 22px}
+  details.trust summary{cursor:pointer;padding:18px 0;font-weight:600;list-style:none}
+  details.trust summary::before{content:"+ ";color:var(--accent);font-family:var(--mono)}
+  details.trust[open] summary::before{content:"– "}
+  .mech{display:grid;grid-template-columns:1fr 1fr;gap:6px 28px;padding-bottom:20px}
+  .mech .checks li{font-size:14.5px}
+
+  .assume li{font-size:14.5px}
+  .tweaks{border:1px solid var(--accent);background:var(--accent-wash);border-radius:12px;padding:20px 22px}
+  .tweak{display:flex;justify-content:space-between;gap:12px;align-items:center;background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:10px 12px;margin-top:10px;font:13.5px var(--mono)}
+  .tweak button{font:12px var(--sans);border:1px solid var(--rule-strong);background:var(--paper);border-radius:6px;padding:4px 10px;cursor:pointer}
+  .tweak button:focus-visible{outline:2px solid var(--accent)}
+  @media (max-width:760px){
+    .findings,.options,.mech{grid-template-columns:1fr}
+    .options,.choice-why,.weakest .flag{margin-left:0}
+    .steps{grid-template-columns:1fr 1fr}
+    .step{border-top:1px solid var(--rule)}
+    h1{font-size:34px}
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Plan · macOS_PGP_Mail_Extension</div>
+  <h1>Getting GPGMail working again on macOS 27</h1>
+  <p class="lede">The old compose crash doesn't reproduce on macOS 27, so this is a modernise-and-fix job: split out a platform-neutral core, fix the bugs we found, and add the missing UI. It's not a rescue.</p>
+  <div class="chips">
+    <span class="chip"><b>Effort</b> ~1 day of agent time</span>
+    <span class="chip"><b>Files</b> ~20 touched, 6 new</span>
+    <span class="chip"><b>Risk</b> medium: Mail's line-ending behaviour, Libmacgpg longevity</span>
+    <span class="chip"><b>Platform</b> macOS only (MailKit is <code>API_UNAVAILABLE(ios)</code>)</span>
+  </div>
+
+  <section>
+    <div class="eyebrow">What the repro told us</div>
+    <h2>Evidence so far</h2>
+    <div class="findings">
+      <div class="card">
+        <ul class="checks">
+          <li class="ok">Builds cleanly on Xcode 27 against Libmacgpg 1.5.1</li>
+          <li class="ok">Compose, 60s autosave and ⌘S, with signing <em>on</em>: no crash</li>
+          <li class="ok">Mail 27 saves drafts without calling <code>encode</code>, so the old crash path has gone</li>
+          <li class="ok">Sign toggle lights up for an address that has a key</li>
+        </ul>
+      </div>
+      <div class="card">
+        <ul class="checks">
+          <li class="no">Encrypt is always greyed out: it checks <code>canEncrypt</code> on the primary key, but modern keys encrypt with a subkey</li>
+          <li class="no">Decode path can crash: <code>ValidSignature</code> force-unwraps algorithm IDs, plus several <code>as!</code> and <code>!</code> on Mail input</li>
+          <li class="no">Signature details view and host app are empty stubs</li>
+          <li class="na">Not yet tested end to end: actually sending a signed/encrypted mail, then decrypting it</li>
+          <li class="na">Two incoming shapes must both decrypt: <strong>inline PGP</strong> (A&amp;A support: armour inside a single <code>text/plain</code> body) and <strong>PGP/MIME</strong> (A&amp;A invoice: <code>multipart/encrypted</code>, partial-length packets, ~88&nbsp;KB with an attachment inside)</li>
+          <li class="ok">Both A&amp;A originals decrypt with your imported Keybase key (<code>…F0022C3BE595C085</code>). Inline decrypts to bare LF text with no MIME headers; PGP/MIME decrypts to a CRLF <code>multipart/mixed</code> with base64 text + a PDF</li>
+          <li class="no">Both are signed by A&amp;A's key <code>2BC593F64AD8A132</code>, which isn't in your keyring: gpg reports <code>ERRSIG NO_PUBKEY</code> and exits <strong>2</strong> even though decryption succeeded</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Section A · decisions you're most likely to change</div>
+    <h2>Judgement calls</h2>
+    <p class="section-intro">Each card shows my pick next to a real alternative. Click to flip it, then copy your choices into the tweak card at the end.</p>
+
+    <div class="card choice weakest">
+      <span class="flag">Weakest part of the plan</span>
+      <div class="choice-head"><span class="choice-id">A1</span><h3>Which GPG engine sits behind the core</h3></div>
+      <p class="choice-why">Libmacgpg is a GPG Suite binary from 2022 and isn't open to us. If GPG Suite stops shipping it, the extension breaks. Either way it goes behind a small <code>PGPBackend</code> protocol, so it can be swapped later or for iOS.</p>
+      <div class="options">
+        <button class="opt" aria-pressed="true"><span class="tag">Plan's pick</span><strong>Keep Libmacgpg behind the protocol</strong>It works today, gives us the keyring and parsed status codes for free, and uses the sandbox exceptions we already have.</button>
+        <button class="opt" aria-pressed="false"><span class="tag">Alternative</span><strong>Call MacGPG2's <code>gpg</code> directly</strong>Use <code>Process</code> + <code>--status-fd</code>, parsing the status lines ourselves. No closed binary in the chain, at the cost of about 200 more lines and a sandbox exec exception.</button>
+      </div>
+    </div>
+
+    <div class="card choice">
+      <div class="choice-head"><span class="choice-id">A2</span><h3>Where the platform-neutral core lives</h3></div>
+      <p class="choice-why">This is your "keep the door open" for iOS. MIME parsing and PGP/MIME assembly must never import MailKit, AppKit or Libmacgpg.</p>
+      <div class="options">
+        <button class="opt" aria-pressed="true"><span class="tag">Plan's pick</span><strong><code>GPGCore</code> framework target</strong>A separate target that the extension and the unit tests both link. The compiler enforces the boundary.</button>
+        <button class="opt" aria-pressed="false"><span class="tag">Alternative</span><strong>A <code>Core/</code> folder in the extension</strong>Fewer moving parts, but the boundary is a convention. Tests would need to compile those files separately.</button>
+      </div>
+    </div>
+
+    <div class="card choice">
+      <div class="choice-head"><span class="choice-id">A3</span><h3>Encrypting to yourself</h3></div>
+      <p class="choice-why">Today it encrypts only to recipients, so your own Sent copy can't be read, by you or by a future iOS reader.</p>
+      <div class="options">
+        <button class="opt" aria-pressed="true"><span class="tag">Plan's pick</span><strong>Also encrypt to the sender's key</strong>This matches GPGTools and Thunderbird. Sent mail stays readable.</button>
+        <button class="opt" aria-pressed="false"><span class="tag">Alternative</span><strong>Recipients only</strong>Keeps current behaviour. Sent copies are unreadable ciphertext.</button>
+      </div>
+    </div>
+
+    <div class="card choice">
+      <div class="choice-head"><span class="choice-id">A4</span><h3>Line endings</h3></div>
+      <p class="choice-why">There are three <code>// TODO: REMOVE THIS</code> CRLF↔LF hacks scattered across the encode and decode paths. Signatures break if the canonical form is wrong.</p>
+      <div class="options">
+        <button class="opt" aria-pressed="true"><span class="tag">Plan's pick</span><strong>Core is CRLF-only, with one adapter at the MailKit edge</strong>RFC 3156 canonical CRLF everywhere inside the core. A single tested converter matches whatever Mail 27 hands over and expects back, captured as fixtures in step 1.</button>
+        <button class="opt" aria-pressed="false"><span class="tag">Alternative</span><strong>Leave the hacks, add tests around them</strong>A smaller change, but the conversions stay spread around and are easy to double-apply.</button>
+      </div>
+    </div>
+
+    <div class="card choice">
+      <div class="choice-head"><span class="choice-id">A5</span><h3>Signature details panel (shown when you click the signed badge in Mail)</h3></div>
+      <div class="options">
+        <button class="opt" aria-pressed="true"><span class="tag">Plan's pick</span><strong>Minimal SwiftUI panel</strong>Signer name and email, short fingerprint, when it was signed, and key validity or expiry. Bad and unknown signatures say what happened and what to do, e.g. "Import the sender's key".</button>
+        <button class="opt" aria-pressed="false"><span class="tag">Alternative</span><strong>Leave it out</strong>Delete the empty xib and let Mail's own signed/encrypted badge be the only UI.</button>
+      </div>
+    </div>
+
+    <div class="card choice">
+      <div class="choice-head"><span class="choice-id">A6</span><h3>Host app window</h3></div>
+      <div class="options">
+        <button class="opt" aria-pressed="true"><span class="tag">Plan's pick</span><strong>One-screen setup checklist</strong>GPG Suite found? How many secret and public keys? Then "Turn on GPGMail in Mail › Settings › Extensions".</button>
+        <button class="opt" aria-pressed="false"><span class="tag">Alternative</span><strong>Keep "Hello, world"</strong>It's for you only. You already know the setup.</button>
+      </div>
+    </div>
+
+    <div class="card choice">
+      <div class="choice-head"><span class="choice-id">A7</span><h3>Deployment floor and Swift version</h3></div>
+      <div class="options">
+        <button class="opt" aria-pressed="true"><span class="tag">Plan's pick</span><strong>macOS 15, Swift 6 language mode</strong>Strict concurrency suits the <code>async</code> MailKit handler. 15 still covers the last few releases if you share it later.</button>
+        <button class="opt" aria-pressed="false"><span class="tag">Alternative</span><strong>Keep macOS 12, Swift 5</strong>The widest reach, with no concurrency migration. It keeps the 2021-era settings.</button>
+      </div>
+    </div>
+
+    <div class="card choice">
+      <div class="choice-head"><span class="choice-id">A8</span><h3>End-to-end check</h3></div>
+      <div class="options">
+        <button class="opt" aria-pressed="true"><span class="tag">Plan's pick</span><strong>Send one real mail to yourself</strong>Codex sends a signed and encrypted test from <code>ollie@ollies.email</code> to itself with the throwaway key, then checks it decrypts and verifies in Mail. I'll still ask before it sends.</button>
+        <button class="opt" aria-pressed="false"><span class="tag">Alternative</span><strong>Never send</strong>Unit tests plus fixture round-trips only. The real send path stays untested until you try it.</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Section B · order of work</div>
+    <h2>Sequencing</h2>
+    <p class="section-intro">Each step leaves a working build behind it, and behaviour only changes from step 4 onwards.</p>
+    <div class="steps">
+      <div class="step"><span class="n">1</span><h4>Capture fixtures</h4>Temporary logging dumps the exact bytes Mail passes to <code>encode</code> and <code>decodedMessage</code> for plain, signed and encrypted mail. Plus synthetic copies of your two A&amp;A shapes (inline and PGP/MIME with a PDF inside), encrypted to the test key and signed by a second throwaway key that is then removed, to reproduce the unknown-signer case. These become test fixtures.<span class="who">luna + codex</span></div>
+      <div class="step"><span class="n">2</span><h4>Modernise project</h4>Xcode 27 settings, deployment target and Swift 6 mode. Fix whatever warnings come up.<span class="who">sonnet</span></div>
+      <div class="step"><span class="n">3</span><h4>Extract core</h4><code>GPGCore</code> + <code>PGPBackend</code>, with a Libmacgpg adapter in the extension. Unit tests use a fake backend.<span class="who">opus · I review</span></div>
+      <div class="step"><span class="n">4</span><h4>Fix bugs</h4>Key selection, crash-proof decoding, the line-ending adapter and encrypt-to-self (Section C).<span class="who">opus · I review</span></div>
+      <div class="step"><span class="n">5</span><h4>UI</h4>Signature details panel and the host app checklist.<span class="who">opus · I review taste</span></div>
+      <div class="step"><span class="n">6</span><h4>Verify in Mail</h4>Compose, autosave, send-to-self (asking first), then decrypt and verify. Delete the test key afterwards.<span class="who">luna + codex</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Section C · mechanical</div>
+    <details class="trust">
+      <summary>Bug fixes and cleanup (trust me)</summary>
+      <div class="mech">
+        <ul class="checks">
+          <li class="na">Key choice uses <code>canAnySign</code> / <code>canAnyEncrypt</code> and skips expired, revoked and disabled keys</li>
+          <li class="na">Email matching ignores case on both sides (today only Mail's side is lowercased)</li>
+          <li class="na">One shared <code>GPGKeyManager</code> with a cached email→key index. The decoder stops building a new manager for every message</li>
+          <li class="na">Remove every <code>!</code> / <code>as!</code> on external input: <code>ValidSignature</code>, <code>rawData!</code>, <code>primaryUserID.name!</code>, the <code>statusDict</code> casts</li>
+          <li class="na">Unknown signature or hash algorithms decode as "unknown" instead of crashing</li>
+        </ul>
+        <ul class="checks">
+          <li class="na">Encryption failures report an encryption error, not <code>signingFailed</code></li>
+          <li class="na">Judge results from gpg status lines, not the exit code alone: <code>DECRYPTION_OKAY</code> + <code>ERRSIG NO_PUBKEY</code> means "decrypted, signed by an unknown key" (shown in the panel), not a failure. gpg's stderr goes into real error messages</li>
+          <li class="na"><code>print</code> → <code>os.Logger</code> (subsystem <code>com.olliespage.GPGMail</code>)</li>
+          <li class="na">Accept <code>Version: 1</code> with CRLF, LF or trailing whitespace</li>
+          <li class="na">Fix typos in type names (<code>BadSignaure</code>, <code>primaryKeyFingerpring</code>). The <code>GPGMailExtention</code> bundle ID stays, so Mail doesn't re-register the extension</li>
+          <li class="na">Update the README for the current setup</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <section>
+    <div class="eyebrow">Assumptions I'm making</div>
+    <div class="card">
+      <ul class="checks assume">
+        <li class="na">GPG Suite stays installed. Its <code>~/.gnupg</code> keyring is the source of truth.</li>
+        <li class="na">Builds are signed with your personal team (<code>D6AAJCLH87</code>). No notarisation or App Store work this round.</li>
+        <li class="na">The throwaway test key (<code>17AC…78F2</code>, expires 24 Oct) stays until step 6 so it can be reused for verification, then I delete it. That's later than I first said.</li>
+        <li class="na">You'll delete the leftover <strong>"draft autosave test"</strong> draft in Gmail yourself.</li>
+        <li class="na">No iOS target, and no crypto library swap, this round.</li>
+        <li class="na">Your real A&amp;A emails stay out of the repo. Tests use synthetic look-alikes built from their structure, without your addresses or headers.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="tweaks">
+      <h3>Tweak these three things</h3>
+      <p style="color:var(--ink-soft);margin-top:6px">These are the most likely changes. Copy a line as your reply, or reply "go" to accept the plan as it stands.</p>
+      <div class="tweak"><span>A1: call gpg directly, drop Libmacgpg</span><button>Copy</button></div>
+      <div class="tweak"><span>A7: keep macOS 12 and Swift 5</span><button>Copy</button></div>
+      <div class="tweak"><span>A8: never send real mail, tests only</span><button>Copy</button></div>
+    </div>
+  </section>
+</main>
+<script>
+  document.querySelectorAll('.options').forEach(group => {
+    group.querySelectorAll('.opt').forEach(btn => btn.addEventListener('click', () => {
+      group.querySelectorAll('.opt').forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+    }));
+  });
+  document.querySelectorAll('.tweak button').forEach(btn => btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(btn.previousElementSibling.textContent);
+    btn.textContent = 'Copied';
+    setTimeout(() => btn.textContent = 'Copy', 1500);
+  }));
+</script>
+</body>
+</html>
