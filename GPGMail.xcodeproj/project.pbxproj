@@ -1016,7 +1016,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GPGMailExtention/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = GPGMailExtention;
+				INFOPLIST_KEY_CFBundleDisplayName = GPGMail;
 				INFOPLIST_KEY_CFBundleExecutable = GPGMailExtention;
 				INFOPLIST_KEY_CFBundleName = GPGMailExtention;
 				INFOPLIST_KEY_CFBundleVersion = 1;
@@ -1054,7 +1054,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GPGMailExtention/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = GPGMailExtention;
+				INFOPLIST_KEY_CFBundleDisplayName = GPGMail;
 				INFOPLIST_KEY_CFBundleExecutable = GPGMailExtention;
 				INFOPLIST_KEY_CFBundleName = GPGMailExtention;
 				INFOPLIST_KEY_CFBundleVersion = 1;
