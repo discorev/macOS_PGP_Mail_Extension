@@ -8,7 +8,7 @@
 import MailKit
 import os
 
-class MailExtension: NSObject, MEExtension {
+nonisolated final class MailExtension: NSObject, MEExtension {
     
     func handlerForMessageSecurity() -> MEMessageSecurityHandler {
         // Use a shared instance for all messages, since there's

@@ -10,7 +10,7 @@ import GPGCore
 import os
 
 /// The MailKit shell: maps Mail's types to and from GPGCore, which does the actual work.
-class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
+nonisolated final class MessageSecurityHandler: NSObject, MEMessageSecurityHandler, Sendable {
     static let shared = MessageSecurityHandler()
 
     private let backend = LibmacgpgBackend.shared
@@ -20,7 +20,7 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
     /// Check if a message being composed can be signed and or encrypted
     /// - Parameter message: Message to check
     /// - Returns:`MEOutgoingMessageEncodingStatus` showing if a message can be signed and or encrypted
-    nonisolated func encodingStatus(for message: MEMessage, composeContext: MEComposeContext) async -> MEOutgoingMessageEncodingStatus {
+    func encodingStatus(for message: MEMessage, composeContext: MEComposeContext) async -> MEOutgoingMessageEncodingStatus {
         let recipients = message.allRecipientAddresses
         let status = MessageEncoder(backend: backend).status(sender: Self.address(message.fromAddress), recipients: recipients.map(Self.address))
         let failing = recipients.filter { status.addressesFailingEncryption.contains(Self.address($0)) }
@@ -32,7 +32,7 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
     ///   - message: Message to sign or encrypt
     ///   - composeContext: Whether the user chose to sign and / or encrypt
     /// - Returns: The result of signing / encrypting
-    nonisolated func encode(_ message: MEMessage, composeContext: MEComposeContext) async -> MEMessageEncodingResult {
+    func encode(_ message: MEMessage, composeContext: MEComposeContext) async -> MEMessageEncodingResult {
         guard let rawData = message.rawData else {
             return MEMessageEncodingResult(encodedMessage: nil, signingError: nil, encryptionError: nil)
         }
@@ -53,7 +53,7 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
     /// Decrypt encoded message and check signature
     /// - Parameter data: RFC822 message
     /// - Returns:Decoded message or nil
-    nonisolated func decodedMessage(forMessageData data: Data) -> MEDecodedMessage? {
+    func decodedMessage(forMessageData data: Data) -> MEDecodedMessage? {
         let result: DecodedMessage?
         do {
             result = try MessageDecoder(backend: backend).decode(Self.canonical(data))
@@ -75,12 +75,12 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
     ///
     /// What Mail 27 passes to `encode` and `decodedMessage` hasn't been captured, so this accepts LF-only, CRLF and
     /// mixed input and never double-converts. Verified by the end-to-end Mail test (plan step 6).
-    private nonisolated static func canonical(_ data: Data) -> Data {
+    private static func canonical(_ data: Data) -> Data {
         Mime.canonicalCRLF(data)
     }
 
     /// Mail's view of a signature. The core `Signature` rides along as JSON in the context for the details view.
-    private nonisolated func signer(for signature: Signature) -> MEMessageSigner {
+    private func signer(for signature: Signature) -> MEMessageSigner {
         var emails = (signature.primaryKeyFingerprint ?? signature.fingerprint).map(backend.keys.directory.emails(forFingerprint:)) ?? []
         if emails.isEmpty, let email = signature.signerEmail {
             emails = [email]
@@ -89,14 +89,14 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
         return MEMessageSigner(emailAddresses: emails.map { MEEmailAddress(rawString: $0) }, signatureLabel: label, context: try? JSONEncoder().encode(signature))
     }
 
-    private nonisolated static func address(_ address: MEEmailAddress) -> String {
+    private static func address(_ address: MEEmailAddress) -> String {
         address.addressString ?? address.rawString
     }
 
     // MARK: - Displaying Security Information
 
     /// The details panel for the signed badge. Each signer carries its core `Signature` as JSON.
-    func extensionViewController(signers messageSigners: [MEMessageSigner]) -> MEExtensionViewController? {
+    @MainActor func extensionViewController(signers messageSigners: [MEMessageSigner]) -> MEExtensionViewController? {
         let decoder = JSONDecoder()
         let signatures = messageSigners.compactMap { try? decoder.decode(Signature.self, from: $0.context) }
         guard !signatures.isEmpty else {
@@ -109,11 +109,11 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
     }
 
     /// Decoded messages don't carry a message context, so there's no banner view to show
-    func extensionViewController(messageContext context: Data) -> MEExtensionViewController? {
+    @MainActor func extensionViewController(messageContext context: Data) -> MEExtensionViewController? {
         nil
     }
 
-    func primaryActionClicked(forMessageContext context: Data) async -> MEExtensionViewController? {
+    @MainActor func primaryActionClicked(forMessageContext context: Data) async -> MEExtensionViewController? {
         nil
     }
 }
