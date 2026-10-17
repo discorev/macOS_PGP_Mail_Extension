@@ -68,6 +68,8 @@ nonisolated final class MessageSecurityHandler: NSObject, MEMessageSecurityHandl
         guard let result else {
             return nil
         }
+        let statuses = result.signatures.map { "\($0.status)" }.joined(separator: ", ")
+        Logger.gpgMail.notice("Decoded message: encrypted \(result.isEncrypted, privacy: .public), signatures [\(statuses, privacy: .public)], signing error: \(result.signingError?.localizedDescription ?? "none", privacy: .public)")
 
         let signers = result.signatures.map(signer(for:))
         let securityInformation = MEMessageSecurityInformation(signers: signers, isEncrypted: result.isEncrypted, signingError: result.signingError, encryptionError: nil)

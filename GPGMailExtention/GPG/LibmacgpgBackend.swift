@@ -19,8 +19,9 @@ final class LibmacgpgBackend: PGPBackend {
     }
 
     func verify(signature: Data, signedData: Data) throws -> [Signature] {
-        // gpg reads the signature from stdin and the signed data from a file
-        let url = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        // gpg reads the signature from stdin and the signed data from a file. gpg runs outside the sandbox, through
+        // Libmacgpg's helper, and macOS won't let it into the extension's container, so the file goes in ~/.gnupg.
+        let url = Self.gnupgHome.appendingPathComponent("gpgmail-\(UUID().uuidString)")
         do {
             try signedData.write(to: url)
         } catch {
@@ -59,6 +60,12 @@ final class LibmacgpgBackend: PGPBackend {
     func encryptionKey(for email: String) -> PGPKey? {
         keys.directory.encryptionKey(for: email)
     }
+
+    /// The real ~/.gnupg, which the entitlements open up. The sandbox's home directory is the container.
+    private static let gnupgHome: URL = {
+        let home = getpwuid(getuid()).flatMap { $0.pointee.pw_dir.map { String(cString: $0) } } ?? NSHomeDirectory()
+        return URL(fileURLWithPath: home).appendingPathComponent(".gnupg")
+    }()
 
     /// Run gpg. Libmacgpg adds `--status-fd` itself and collects the lines in `statusText`.
     private func run(_ arguments: [String], input: Data) -> GPGRun {
