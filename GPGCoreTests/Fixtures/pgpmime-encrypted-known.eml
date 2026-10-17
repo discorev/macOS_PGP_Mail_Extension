@@ -1,0 +1,44 @@
+From: GPGMail Test <ollie@ollies.email>
+To: GPGMail Test <ollie@ollies.email>
+Date: Fri, 16 Oct 2026 12:00:00 +0000
+Message-ID: <fixture-pgpmime-encrypted-known@gpgmail.test>
+Subject: pgpmime-encrypted-known
+MIME-Version: 1.0
+Content-Type: multipart/encrypted; protocol="application/pgp-encrypted"; boundary=CUT-HERE-1234567890
+
+--CUT-HERE-1234567890
+Content-Type: application/pgp-encrypted
+
+Version: 1
+--CUT-HERE-1234567890
+Content-Type: application/octet-stream
+Content-Disposition: inline; filename="encrypted.asc"
+
+-----BEGIN PGP MESSAGE-----
+
+hF4DgWuUcYaHbhkSAQdAkNQu6Vi/4sRnY830ZIdq5pzfaP+OHS5b3t59WEq/XCMw
+t9yfi8pjbmAkxoOvV1pllTpPQxU9gR+nWweK9mg2YWD4Y1egVhOZRmHpjDVP9vM1
+0ukB2OA8b2RzlMj+EER3lYnbWjI9t9Vkh2VDSjYKrU3lL26RS22Nxf2orpz70Cdv
+RYOnLNhHtIYTZfeAvjFZDxcYN+JncHwslxEsw6JRdoMMQ7SjbDgAXWBg/864mY2I
+AeXp6mMpG1iHgfJzejfClkvoH6iYiVYivjwXtRLdDLx6KC555SGaZVbYHELSKcYL
+c9TSvGmMU4QOCg7PJEQjFBYsuK9q2WrWPW+09Qv8aVRJ3UFV54yfr8LMDXPInbaA
+nQe8gQDr4T7ySMywp4nSFcyNxHlNZqXQ8hAj7E+gXCtPnGC+h0CMkktGnbYbmMLM
+sFM5sLdpAuUlcP8K2oOrAE8ystK7Bpu3ivpiKR4xpi26yBfolg7uUfW3RKfurtnw
+fg5fSjBuXwigT5m3MQ5NMyg2+OXPjN0SHcWyXunyBJF9lezAVgrj7efzYMBkB0ht
+pnIQrj/NIGZ3B4JAr8ZhVoHdBOCYQqYRWJHBVWfIdjIA2q9N4aa19kEQPKBSesMd
+dfWy3uSqWuP52ilbLCNd+bXM+DmvAgS8SekdYFNtZZh9w8BITVUDuY8o+fu0BcIS
+KvhvWUdUsqLe5ihVCHj0q8iToixJUJy/ad4PngFIud/s5piNGZXB6xSj3qdlyRcT
+9KQzZ3lUcSa6byfWfSnK5e/kdekr6dqa5UuCk88QZrChzsEQ8FO15DNLntuv6wEN
+6cuSqVDa5Klg1zwbZzEwFDtBU3kvJV1ECRjRClnNQDO1Sdt25SiGKYArZ1+XkAZK
+C/UJsqd0Y9ajC1N//WKv0/Sau0AhSTDJgD9fT+hc0YgM0Cs6R9a4fNzRU3xcTOAq
+8ypNDBIe0G0EL2pewwoCL1Nx2PEh95plof8JwlYf1dafTWA7gbXnkJcPrTtqX4eC
+oXfndoljJY/OmKyd3CG2EmPDHS2s2TeNuBJT3Pv/Z6kCDscs+c/fVKaN3jWvWBeq
+v0gpVikrBhdz+P5g8klbdfHceIekOVz0oVAPfLh8P9c2SQ4Hq/GftuF1Ial3J7DR
+VSEbz9+1+/uyYwJ1jw9bAlGCQ6zWQSo75M9RmI7PfaEAa6pKFAU7D8sY36pG3IHl
+VCGLMQQYWibb7IjTv6mQAavifnIPGzN4A1ZIgNcqodWF+u3u80wZJMoKw8/ijpD3
+0dj+Sb1XQksac2wfAk++F/2Rf1ZevA34z20ixsDwBZ+1aY8OZ7HvfSTvwHZkHbgh
+/m0nxT704xQhkOmwSwkmgA9V2VScOuKmtrGAGXlhycCeSjo2/6beBQBpLU7+TfTC
+nnkqX+YTn4y1Ns+edJ0P4HQ0Tb4=
+=qj1N
+-----END PGP MESSAGE-----
+--CUT-HERE-1234567890--

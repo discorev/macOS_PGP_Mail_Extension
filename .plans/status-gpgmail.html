@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GPGMail: status report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF9F5; --card:#FFFFFF; --rule:#E6E1D6; --rule-strong:#D6CFC1;
+    --ink:#2A2620; --ink-soft:#615A4F; --ink-faint:#8D8576;
+    --accent:#D97757; --accent-wash:#FBEDE6; --olive:#788C5D; --olive-wash:#EEF2E8; --red:#B5523B;
+    --serif:"Newsreader",Georgia,serif; --sans:"Instrument Sans",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 var(--sans)}
+  main{max-width:980px;margin:0 auto;padding:56px 28px 96px}
+  h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;margin:0}
+  h1{font-size:44px;line-height:1.1;max-width:22ch}
+  h2{font-size:28px;margin-bottom:6px}
+  h3{font-size:20px}
+  p{margin:0 0 10px;max-width:72ch}
+  code{font:13px var(--mono);background:#F2EEE5;padding:1px 5px;border-radius:4px}
+  .eyebrow{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+  .lede{font-size:18px;color:var(--ink-soft);margin-top:14px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .chip{font:12px var(--mono);border:1px solid var(--rule-strong);background:var(--card);border-radius:999px;padding:5px 12px;color:var(--ink-soft)}
+  .chip b{color:var(--ink);font-weight:500}
+  section{margin-top:56px}
+  .section-intro{color:var(--ink-soft);margin-bottom:20px}
+  .card{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:20px 22px}
+
+  /* findings */
+  .findings{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .checks{list-style:none;margin:0;padding:0}
+  .checks li{position:relative;padding:7px 0 7px 28px;border-top:1px solid var(--rule)}
+  .checks li::before{position:absolute;left:2px}
+  .checks li:first-child{border-top:0}
+  .ok::before{content:"✓";color:var(--olive);font-weight:600}
+  .no::before{content:"✗";color:var(--red);font-weight:600}
+  .na::before{content:"→";color:var(--ink-faint)}
+
+  /* choice cards */
+  .choice{margin-bottom:16px}
+  .choice-head{display:flex;gap:12px;align-items:baseline;margin-bottom:12px}
+  .choice-id{font:500 12px var(--mono);color:var(--accent);min-width:26px}
+  .choice-why{color:var(--ink-soft);font-size:14.5px;margin:-4px 0 12px 38px}
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-left:38px}
+  .opt{all:unset;cursor:pointer;display:block;border:1px solid var(--rule);border-radius:10px;padding:14px 16px;background:#FDFCFA;font-size:14.5px;color:var(--ink-soft);position:relative}
+  .opt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .opt .tag{display:block;font:500 10.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px}
+  .opt strong{display:block;color:var(--ink);font-weight:600;margin-bottom:4px}
+  .opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash);color:var(--ink)}
+  .opt[aria-pressed="true"] .tag{color:var(--accent)}
+  .opt[aria-pressed="true"] .tag::after{content:" · selected"}
+  .weakest{border-left:4px solid var(--accent)}
+  .weakest .flag{font:500 11px var(--mono);color:var(--accent);margin-left:38px;margin-bottom:8px;display:block}
+
+  /* sequence */
+  .steps{display:grid;grid-template-columns:repeat(6,1fr);gap:0;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:var(--card)}
+  .step{padding:16px 14px;border-left:1px solid var(--rule);font-size:13.5px;color:var(--ink-soft)}
+  .step:first-child{border-left:0}
+  .step .n{font:500 12px var(--mono);color:var(--accent)}
+  .step h4{font:600 15px var(--sans);color:var(--ink);margin:4px 0 6px}
+  .step .who{font:11px var(--mono);color:var(--olive);margin-top:8px;display:block}
+
+  details.trust{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:0 22px}
+  details.trust summary{cursor:pointer;padding:18px 0;font-weight:600;list-style:none}
+  details.trust summary::before{content:"+ ";color:var(--accent);font-family:var(--mono)}
+  details.trust[open] summary::before{content:"– "}
+  .mech{display:grid;grid-template-columns:1fr 1fr;gap:6px 28px;padding-bottom:20px}
+  .mech .checks li{font-size:14.5px}
+
+  .assume li{font-size:14.5px}
+  .tweaks{border:1px solid var(--accent);background:var(--accent-wash);border-radius:12px;padding:20px 22px}
+  .tweak{display:flex;justify-content:space-between;gap:12px;align-items:center;background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:10px 12px;margin-top:10px;font:13.5px var(--mono)}
+  .tweak button{font:12px var(--sans);border:1px solid var(--rule-strong);background:var(--paper);border-radius:6px;padding:4px 10px;cursor:pointer}
+  .tweak button:focus-visible{outline:2px solid var(--accent)}
+  @media (max-width:760px){
+    .findings,.options,.mech{grid-template-columns:1fr}
+    .options,.choice-why,.weakest .flag{margin-left:0}
+    .steps{grid-template-columns:1fr 1fr}
+    .step{border-top:1px solid var(--rule)}
+    h1{font-size:34px}
+  }
+</style>
+<style>
+  .commits{font:13px var(--mono);list-style:none;padding:0;margin:0}
+  .commits li{padding:6px 0;border-top:1px solid var(--rule)}
+  .commits li:first-child{border-top:0}
+  .commits b{color:var(--accent);font-weight:500;margin-right:8px}
+  .callout{border-left:4px solid var(--accent);background:var(--card);border-radius:12px;padding:18px 22px;border-top:1px solid var(--rule);border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Status · macOS_PGP_Mail_Extension · branch modernise</div>
+  <h1>GPGMail works on macOS 27</h1>
+  <p class="lede">In Mail it signs, encrypts, decrypts and verifies, both your own mail and the two A&amp;A shapes. Getting there turned up two Mail-only bugs that unit tests couldn't catch. Both are fixed and checked in Mail.</p>
+  <div class="chips">
+    <span class="chip"><b>Commits</b> 9 on modernise, not pushed</span>
+    <span class="chip"><b>Tests</b> 66 GPGCore + 2 app, green</span>
+    <span class="chip"><b>Diff</b> 71 files, +4.5k / −1.4k</span>
+    <span class="chip"><b>Test mails sent</b> 2 (both to yourself, both deleted)</span>
+  </div>
+
+  <section>
+    <div class="eyebrow">Verified in Mail (final run)</div>
+    <h2>What works</h2>
+    <div class="findings">
+      <div class="card"><ul class="checks">
+        <li class="ok">Compose with sign + encrypt both available (encrypt was always greyed out before)</li>
+        <li class="ok">Send: no alert, no crash. Sent copy shows <em>Signed (GPGMail Extension TEST KEY), Encrypted</em></li>
+        <li class="ok">Body round-trips exactly, including <code>Café, naïve, £5 — ✓ 😀</code> and line breaks</li>
+        <li class="ok">Signature panel: "Valid signature", signer, fingerprint, date, "Your own key", key expiry</li>
+      </ul></div>
+      <div class="card"><ul class="checks">
+        <li class="ok">A&amp;A support mail (inline PGP): readable text, <em>Signed (Andrews &amp; Arnold Ltd), Encrypted</em></li>
+        <li class="ok">A&amp;A invoice (PGP/MIME): readable body plus the <code>I26188459A.pdf</code> attachment</li>
+        <li class="ok">Both panels: "Valid signature · This key isn't certified", with the advice to check and certify</li>
+        <li class="ok">No pinentry prompt (your Keybase passphrase was cached)</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Found during step 6</div>
+    <h2>Two bugs only Mail could show</h2>
+    <div class="findings">
+      <div class="card"><h3>Extension crashed on every load</h3><p style="margin-top:8px;color:var(--ink-soft)">Swift 6 inferred main-actor isolation from MailKit's protocols, but Mail creates the extension on an XPC queue, so <code>MailExtension.init()</code> trapped (8 crash reports). Mail showed raw armour and failed draft saves with "error occurred while trying to encrypt". Fix: the principal and handler are <code>nonisolated</code>; only the view-controller methods are <code>@MainActor</code>.</p></div>
+      <div class="card"><h3>Saving a signed draft crashed Mail</h3><p style="margin-top:8px;color:var(--ink-soft)">Mail 27 does call <code>encode</code> when it saves a draft, so drafts were signed as multipart/signed. Mail then crashed in its own certificate banner (<code>CertificateBanner.swift:53</code>, "configure a banner view without a valid error"). Received signed-only mail opens fine, checked with four probe messages. Fix: drafts, marked by <code>X-Uniform-Type-Identifier: com.apple.mail-draft</code>, are never signed (encrypted drafts stay encrypted). This also stops autosave asking for the passphrase. Verified: a signed draft saved, no crash, no prompt.</p></div>
+      <div class="card"><h3>Mail wants LF back, not CRLF</h3><p style="margin-top:8px;color:var(--ink-soft)">Mail hands the extension CRLF, but for decoded mail returned with CRLF it shows "This message has no content". The first test send also crashed Mail (<code>-[__NSSetM addObject:]: nil</code>) right after encode returned CRLF. Fix: the MailKit edge converts everything handed back to Mail to LF, as your 2021 code did. The core stays CRLF. The second send went through with no crash.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">History</div>
+    <h2>Commits</h2>
+    <div class="card"><ul class="commits">
+      <li><b>cae8295</b>fix: hand LF line endings back to Mail</li>
+      <li><b>b2c89e3</b>fix: stop Swift 6 main-actor trap when Mail loads the extension</li>
+      <li><b>859a41d</b>feat: signature details panel and setup checklist</li>
+      <li><b>ff3bfeb</b>fix: encrypt to uncertified keys rather than failing at send time</li>
+      <li><b>fe80eb2</b>fix: key selection, crash-proof decoding, CRLF handling and encrypt-to-self</li>
+      <li><b>5670ad8</b>refactor: extract platform-neutral GPGCore behind PGPBackend</li>
+      <li><b>7582b97</b>chore: Xcode 27 settings, macOS 15, Swift 6</li>
+      <li><b>8eebcf2</b>test: PGP fixtures (inline, PGP/MIME, signed, bad, unknown signer)</li>
+      <li><b>5545786</b>docs: modernisation plan</li>
+    </ul></div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Recorded along the way</div>
+    <h2>Deviations and decisions</h2>
+    <div class="card"><ul class="checks">
+      <li class="na">Your calls during the run: encrypt to any imported key (<code>--trust-model always</code>), and drop the key counts from the setup screen. The host app stays sandboxed.</li>
+      <li class="na">Plan A4, amended by evidence: the core is CRLF-only, and the MailKit edge converts CRLF in and LF out (not CRLF both ways).</li>
+      <li class="na">Mail doesn't run security extensions on <code>.eml</code> files opened from disk. Only messages in mailboxes go through the decoder.</li>
+      <li class="na">The <code>pgpmime-signed</code> fixture was signed over the boundary CRLF. Fixed so the decoder stays strictly RFC 3156, with no retry heuristic.</li>
+      <li class="na">Steps 3 and 4 ran as one agent with two commits, because the core was rewritten rather than moved.</li>
+      <li class="na">Mail calls <code>encode</code> twice per send, and <code>decodedMessage</code> for every message you view. Non-PGP mail gets <code>nil</code> back quickly.</li>
+    </ul></div>
+  </section>
+
+  <section>
+    <div class="eyebrow">State left behind</div>
+    <h2>Cleaned up, and what's still there</h2>
+    <div class="findings">
+      <div class="card"><ul class="checks">
+        <li class="ok">Throwaway test key deleted (secret and public), plus the revocation folder its keygen created</li>
+        <li class="ok">Test mails <code>1017b</code> and <code>1017c</code> deleted from Sent and Drafts. Neither ever arrived in an inbox.</li>
+        <li class="ok">Debug dumps (which held decrypted A&amp;A text), logs and A&amp;A screenshots deleted</li>
+        <li class="ok">Temporary debug code removed. The tree is clean.</li>
+        <li class="ok">Extension switched off (pluginkit ignore)</li>
+      </ul></div>
+      <div class="card"><ul class="checks">
+        <li class="na">Kept in your keyring: your Keybase key and A&amp;A's <code>auto@aa.net.uk</code> public key (fingerprint matched their website)</li>
+        <li class="na">The A&amp;A support message was marked read when codex first opened it</li>
+        <li class="na">The registered build runs from <code>/tmp/gpgmail-dd</code>, which a reboot clears. Daily use needs the app built into /Applications.</li>
+        <li class="na">Not pushed. The branch is ready to merge or open as a PR.</li>
+      </ul></div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

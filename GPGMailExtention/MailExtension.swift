@@ -6,8 +6,9 @@
 //
 
 import MailKit
+import os
 
-class MailExtension: NSObject, MEExtension {
+nonisolated final class MailExtension: NSObject, MEExtension {
     
     func handlerForMessageSecurity() -> MEMessageSecurityHandler {
         // Use a shared instance for all messages, since there's
@@ -17,3 +18,7 @@ class MailExtension: NSObject, MEExtension {
 
 }
 
+extension Logger {
+    /// The extension's log. GPGCore doesn't log; it returns errors for the extension to report.
+    static let gpgMail = Logger(subsystem: "com.olliespage.GPGMail", category: "Extension")
+}

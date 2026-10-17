@@ -1,0 +1,44 @@
+From: GPGMail Test <ollie@ollies.email>
+To: GPGMail Test <ollie@ollies.email>
+Date: Fri, 16 Oct 2026 12:00:00 +0000
+Message-ID: <fixture-pgpmime-encrypted-unknown@gpgmail.test>
+Subject: pgpmime-encrypted-unknown
+MIME-Version: 1.0
+Content-Type: multipart/encrypted; protocol="application/pgp-encrypted"; boundary=CUT-HERE-1234567890
+
+--CUT-HERE-1234567890
+Content-Type: application/pgp-encrypted
+
+Version: 1
+--CUT-HERE-1234567890
+Content-Type: application/octet-stream
+Content-Disposition: inline; filename="encrypted.asc"
+
+-----BEGIN PGP MESSAGE-----
+
+hF4DgWuUcYaHbhkSAQdAax8iuQ6ySu7tcv3JItdNxmlhsyzS2zoeng0Qqrne3GAw
+6YQvbkG+0JLFLeG8duYg+4t5/G4zElz8PfyEpNVXWqB7V4N0k9TfUdmWsWawTBTQ
+0ukBbvDT5NouLEIj/ZSxyq/HW0dcu1kiXym57WJndnUDdFiCdv8d5+6AVFfxz1F2
+dn82ziFZq23N89pdsw302cOwuX3pylr9/kplIWfNGDrUhULqw4tuOnZj/8rmLjjT
+bft4qEK/LK72m/qQ4491zbLIKYO95cSazMos9epf8Xv8m+O2iMWivrlNEq9kQLHm
+xJf+954DFs1B0EY6F50WsS0dQdRkwqVcys3LZ9wqzKUJVkC4J7yc8qGR+fxhD/OQ
+LV735enTXZ05pA7/dRCgAhq5rZRDGTKWt0aOd+nOhwDRG8LhnqIg2RcXZ8+C77HY
+9PtRfLNwa3z2T4bZQ2ZgpwckL59U6pCy46bCPgPgWTXeL9s4inBAhvEWD/ckJiSk
+t1wpFSIB4P8EGKx+arNaIhOFz1RDzlrNGChJcxUNc2Sv2DwkNtnAkyzelktkfAqk
+zCueXC6eIduaU1NTbAPQwgjhJV5N/lnosmPHEI9GMSB1SkhUV88Hox5JLMF0U+sB
+dfsOVSQUoNPrCkORdfDg/EM8vpDItLshWO0s9lZftq4uA/Qpcnq1KSUf553MMDEc
+WX7PSO7F92iyIUGm8OvuWoGoiXVYay2d2X79PLryqGW1Fu9WP+RD2v5iuUi1j+YL
+OiYtvBD+H2O5aUjx4QNxt/Afo11q4S8/X4LZcYOKThrRyMEK9ZDN9SEOIRuJqWeM
+U4lzeH+btdqlN016sTfG6hCUFsnw5zyGwgwdGF2MCAsG1k1rOolKep5lKM1SsiPJ
+nJkCUaKX+gdnpAXmmCSlkecpTzs4+65azBMOP1dmbLY8nyWaaWgZeWW7dZnjZWC3
+W16dEa/huqBINhWmMWVH1RcG5dAYbpKNx4plqNZGyh6dEqr/dItBwTq0Ld3s38C1
+dDg4E+J1P8M67XvKaVwx0MFlZIrGj+RTRjNJczflj7jxo4lEqcfSPw6eEyanKuJE
+r71rNd5tHEUO+Ztmansl0b2vsuIB3df3JYQqgYtImNj/5N2uFUjZvmUpL8JMMa7A
+XPtQJ88LROD3KWed/2qIg4u7cxPMRw9GsqAZytFAX7MwOfkgosZX6Drzi4UFmU3V
+xQ8USRWArf9lMxL9blVD5crZ8YY/FhfOW5kYKduzcsPjD+qjPHYQjkIc5XUsEnly
+Ms46PT8RlTW3q61wHGEQ6PNT46HvlrJwwOn6LWIyXMNxhVY69dy42IRq7GhuWtQb
+BYcIDeDJJybMcnRZfBRTt420StUkqfLwsziVnh9wjQ7oZZm2+/OYySc+sxZOo/TS
+L8LzL4M+j3wezRhs8Mc=
+=W/Xn
+-----END PGP MESSAGE-----
+--CUT-HERE-1234567890--
