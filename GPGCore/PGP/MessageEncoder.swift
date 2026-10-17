@@ -63,7 +63,12 @@ public struct MessageEncoder: Sendable {
             guard missing.isEmpty, !keys.isEmpty else {
                 throw PGPError.noEncryptionKey(missing)
             }
-            let ciphertext = try backend.encrypt(entity, to: keys.compactMap(\.1), signedBy: signer)
+            // Also encrypt to the sender, when they have a key, so the Sent copy stays readable
+            var recipientKeys = keys.compactMap(\.1)
+            if let own = backend.encryptionKey(for: sender), !recipientKeys.contains(own) {
+                recipientKeys.append(own)
+            }
+            let ciphertext = try backend.encrypt(entity, to: recipientKeys, signedBy: signer)
             return MimeWriter(headers: outer, multipart: "encrypted", parameters: [("protocol", "application/pgp-encrypted")], parts: [
                 Self.versionPart,
                 Self.part(["Content-Type": "application/octet-stream; name=\"openpgp-encrypted-message.asc\"",

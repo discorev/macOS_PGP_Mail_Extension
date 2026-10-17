@@ -109,6 +109,20 @@ struct MessageEncoderTests {
         #expect(plaintext.decodedBody.utf8String == "Café at 5?\r\nSee you there.\r\n")
     }
 
+    @Test func encryptsToTheSenderToo() throws {
+        let backend = stub()
+        _ = try MessageEncoder(backend: backend).encode(Self.message, sender: Self.sender, recipients: [Self.recipient], sign: false, encrypt: true)
+        // Sending to yourself doesn't add your key twice
+        _ = try MessageEncoder(backend: backend).encode(Self.message, sender: Self.sender, recipients: [Self.sender, Self.recipient], sign: false, encrypt: true)
+        // Without a key of your own, it still encrypts to the recipients
+        _ = try MessageEncoder(backend: backend).encode(Self.message, sender: "keyless@example.invalid", recipients: [Self.recipient], sign: false, encrypt: true)
+        #expect(backend.encrypted.map(\.recipients) == [
+            [PGPKey(fingerprint: "FRIEND-FPR"), PGPKey(fingerprint: "SENDER-FPR")],
+            [PGPKey(fingerprint: "SENDER-FPR"), PGPKey(fingerprint: "FRIEND-FPR")],
+            [PGPKey(fingerprint: "FRIEND-FPR")],
+        ])
+    }
+
     @Test func signingAndEncryptingIsOneCall() throws {
         let backend = stub()
         let encoded = try MessageEncoder(backend: backend).encode(Self.message, sender: Self.sender, recipients: [Self.recipient], sign: true, encrypt: true)

@@ -7,72 +7,59 @@
 
 import Foundation
 import Synchronization
+import GPGCore
 
-/// Email to key lookups over the GPG Suite keyring.
+/// The GPG Suite keyring as a `KeyDirectory`.
 ///
 /// Built once from the shared `GPGKeyManager`, and rebuilt on the next lookup after Libmacgpg reports the keys changed.
 final class KeyIndex: Sendable {
-    private struct Snapshot: Sendable {
-        /// Lower-cased email to fingerprint
-        var signing: [String: String] = [:]
-        var encryption: [String: String] = [:]
-        /// Fingerprint of a key or any of its subkeys to the key's emails
-        var emails: [String: [String]] = [:]
-    }
-
-    private let snapshot = Mutex<Snapshot?>(nil)
+    private let cached = Mutex<KeyDirectory?>(nil)
 
     init() {
         _ = NotificationCenter.default.addObserver(forName: .GPGKeyManagerKeysDidChange, object: nil, queue: nil) { [weak self] _ in
-            self?.snapshot.withLock { $0 = nil }
+            self?.cached.withLock { $0 = nil }
         }
     }
 
-    func signingKey(for email: String) -> String? {
-        current().signing[email.lowercased()]
-    }
-
-    func encryptionKey(for email: String) -> String? {
-        current().encryption[email.lowercased()]
-    }
-
-    /// Every email on the key with this (sub)key fingerprint
-    func emails(forFingerprint fingerprint: String) -> [String] {
-        current().emails[fingerprint.uppercased()] ?? []
-    }
-
-    private func current() -> Snapshot {
-        snapshot.withLock { snapshot in
-            if let snapshot {
-                return snapshot
+    var directory: KeyDirectory {
+        cached.withLock { cached in
+            if let cached {
+                return cached
             }
-            let built = Self.build()
-            snapshot = built
-            return built
+            let keys = GPGKeyManager.sharedInstance()?.allKeys as? Set<GPGKey> ?? []
+            let directory = KeyDirectory(keys: keys.compactMap(Self.keyringKey))
+            cached = directory
+            return directory
         }
     }
 
-    private static func build() -> Snapshot {
-        let keys = GPGKeyManager.sharedInstance()?.allKeys as? Set<GPGKey> ?? []
-        var snapshot = Snapshot()
-        for key in keys {
-            guard let fingerprint = key.fingerprint else {
-                continue
-            }
-            let emails = (key.userIDs as? [GPGUserID] ?? []).compactMap { $0.email as String? }
-            for email in emails {
-                if key.canSign && snapshot.signing[email] == nil {
-                    snapshot.signing[email] = fingerprint
-                }
-                if key.canEncrypt && snapshot.encryption[email] == nil {
-                    snapshot.encryption[email] = fingerprint
+    private static func keyringKey(_ key: GPGKey) -> KeyringKey? {
+        guard let fingerprint = key.fingerprint else {
+            return nil
+        }
+        let emails = (key.userIDs as? [GPGUserID] ?? [])
+            .filter { !isRevokedOrInvalid($0.validity) }
+            .compactMap { $0.email as String? }
+            .filter { !$0.isEmpty }
+        let components = [key] + (key.subkeys as? [GPGKey] ?? [])
+        return KeyringKey(
+            fingerprint: fingerprint,
+            emails: emails,
+            hasSecretKey: key.secret,
+            canAnySign: key.canAnySign,
+            canAnyEncrypt: key.canAnyEncrypt,
+            isUnusable: key.expired || key.revoked || key.disabled || key.invalid,
+            created: key.creationDate,
+            components: components.compactMap { component in
+                component.fingerprint.map {
+                    KeyringKey.Component(fingerprint: $0, canSign: component.canSign, canEncrypt: component.canEncrypt, isUnusable: component.expired || component.revoked || component.invalid)
                 }
             }
-            let fingerprints = key.allFingerprints as? Set<String> ?? [fingerprint]
-            for fingerprint in fingerprints {
-                snapshot.emails[fingerprint.uppercased()] = emails
-            }
-        }
-        return snapshot
+        )
+    }
+
+    /// GPGValidity carries revoked and invalid as flags on top of the trust level
+    private static func isRevokedOrInvalid(_ validity: GPGValidity) -> Bool {
+        validity.rawValue & (GPGValidityRevoked.rawValue | GPGValidityInvalid.rawValue) != 0
     }
 }

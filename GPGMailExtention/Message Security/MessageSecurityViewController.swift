@@ -7,6 +7,7 @@
 
 import MailKit
 import GPGCore
+import os
 
 class MessageSecurityViewController: MEExtensionViewController {
     
@@ -21,7 +22,7 @@ class MessageSecurityViewController: MEExtensionViewController {
         if let signers = signers {
             for signer in signers {
                 let signature = try? decoder.decode(Signature.self, from: signer.context)
-                print("signature: \(String(describing: signature))")
+                Logger.gpgMail.debug("Signature: \(String(describing: signature))")
             }
         }
     }

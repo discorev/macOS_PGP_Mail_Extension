@@ -41,6 +41,9 @@
 		C0DE00000000000000000035 /* GPGCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000003 /* GPGCore.framework */; };
 		C0DE00000000000000000036 /* GPGCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000003 /* GPGCore.framework */; };
 		C0DE00000000000000000037 /* GPGCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000003 /* GPGCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C0DE00000000000000000041 /* KeyDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000040 /* KeyDirectory.swift */; };
+		C0DE00000000000000000043 /* KeyDirectoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000042 /* KeyDirectoryTests.swift */; };
+		C0DE00000000000000000045 /* LineEndingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000044 /* LineEndingTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -155,6 +158,9 @@
 		C0DE00000000000000000021 /* MessageEncoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageEncoderTests.swift; sourceTree = "<group>"; };
 		C0DE00000000000000000023 /* LibmacgpgBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibmacgpgBackend.swift; sourceTree = "<group>"; };
 		C0DE00000000000000000022 /* Fixtures */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Fixtures; sourceTree = "<group>"; };
+		C0DE00000000000000000040 /* KeyDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyDirectory.swift; sourceTree = "<group>"; };
+		C0DE00000000000000000042 /* KeyDirectoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyDirectoryTests.swift; sourceTree = "<group>"; };
+		C0DE00000000000000000044 /* LineEndingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineEndingTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -340,6 +346,7 @@
 				C0DE00000000000000000018 /* PGPBackend.swift */,
 				C0DE00000000000000000019 /* MessageDecoder.swift */,
 				C0DE0000000000000000001A /* MessageEncoder.swift */,
+				C0DE00000000000000000040 /* KeyDirectory.swift */,
 			);
 			path = PGP;
 			sourceTree = "<group>";
@@ -362,6 +369,8 @@
 				C0DE0000000000000000001F /* GPGStatusTests.swift */,
 				C0DE00000000000000000020 /* MimeTests.swift */,
 				C0DE00000000000000000021 /* MessageEncoderTests.swift */,
+				C0DE00000000000000000042 /* KeyDirectoryTests.swift */,
+				C0DE00000000000000000044 /* LineEndingTests.swift */,
 			);
 			path = GPGCoreTests;
 			sourceTree = "<group>";
@@ -637,6 +646,7 @@
 				C0DE00000000000000000029 /* PGPBackend.swift in Sources */,
 				C0DE0000000000000000002A /* MessageDecoder.swift in Sources */,
 				C0DE0000000000000000002B /* MessageEncoder.swift in Sources */,
+				C0DE00000000000000000041 /* KeyDirectory.swift in Sources */,
 				C0DE0000000000000000002C /* GPGStatus.swift in Sources */,
 				C0DE0000000000000000002D /* GPGRun.swift in Sources */,
 			);
@@ -651,6 +661,8 @@
 				C0DE00000000000000000030 /* GPGStatusTests.swift in Sources */,
 				C0DE00000000000000000031 /* MimeTests.swift in Sources */,
 				C0DE00000000000000000032 /* MessageEncoderTests.swift in Sources */,
+				C0DE00000000000000000043 /* KeyDirectoryTests.swift in Sources */,
+				C0DE00000000000000000045 /* LineEndingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

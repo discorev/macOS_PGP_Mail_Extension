@@ -1,8 +1,26 @@
 # GPGMail Extension
-This is a mail extension using the new mail APIs in macOS Monterey to interact with the GPG Suite GPG command line wrapper.
+A Mail extension that uses Apple's MailKit API to sign, encrypt, decrypt and verify PGP mail (PGP/MIME and inline) with your GPG Suite keyring.
 
-It's a work-in progress and currently supports decrytion / signature validation as well as encrytion / signing of emails.
+This project isn't part of, or endorsed by, GPGTools, and doesn't use the source code of their GPGMail plugin.
 
-Because it uses the offical API it should be supported between OS versions without delay.
+## Requirements
+- macOS 15 or later
+- [GPG Suite](https://gpgtools.org), which provides gpg, your keyring in `~/.gnupg` and `/Library/Frameworks/Libmacgpg.framework`
+- Xcode 27 to build
 
-This project is not a part of, not indorsed by GPGTools and does not make use of their source code for their GPGMail plugin.
+## Build and enable
+1. Open `GPGMail.xcodeproj`, choose the `GPGMail` scheme and build. Signing uses your own development team.
+2. Run `GPGMail.app` once so macOS registers the extension it contains.
+3. In Mail, go to Settings › Extensions and turn on GPGMailExtention.
+
+Run the unit tests with:
+
+```sh
+xcodebuild test -project GPGMail.xcodeproj -scheme GPGMail -destination 'platform=macOS' -only-testing:GPGCoreTests
+```
+
+## Layout
+- `GPGCore/`: a framework that imports only Foundation, so it can be reused on other platforms. It parses and writes MIME, recognises and decodes PGP/MIME and inline PGP, builds RFC 3156 signed and encrypted messages, parses gpg status lines and chooses keys. It reaches crypto only through the `PGPBackend` protocol, and works in CRLF line endings throughout.
+- `GPGMailExtention/`: the MailKit extension. `LibmacgpgBackend` implements `PGPBackend` with Libmacgpg, and `MessageSecurityHandler` maps between Mail's types and GPGCore.
+- `GPGCoreTests/`: unit tests. They replay recorded gpg runs from `Fixtures/` through a fake backend and never call gpg.
+- `GPGMail/`: the host app that ships the extension.

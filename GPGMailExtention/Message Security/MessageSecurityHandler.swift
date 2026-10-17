@@ -7,6 +7,7 @@
 
 @preconcurrency import MailKit
 import GPGCore
+import os
 
 /// The MailKit shell: maps Mail's types to and from GPGCore, which does the actual work.
 class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
@@ -36,22 +37,13 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
             return MEMessageEncodingResult(encodedMessage: nil, signingError: nil, encryptionError: nil)
         }
 
-        // TODO: REMOVE THIS
-        // Fix apple changing the line endings
-        let messageData = Data(String(decoding: rawData, as: UTF8.self).replacingOccurrences(of: "\n", with: "\r\n").replacingOccurrences(of: "\r\r", with: "\r").utf8)
-
         do {
-            let encoded = try MessageEncoder(backend: backend).encode(messageData, sender: Self.address(message.fromAddress), recipients: message.allRecipientAddresses.map(Self.address), sign: composeContext.shouldSign, encrypt: composeContext.shouldEncrypt)
-
-            // TODO: REMOVE THIS
-            // Cope with the fact apple needs the eml as LF only line endings
-            let lfEncoded = Data(String(decoding: encoded, as: UTF8.self).replacingOccurrences(of: "\r\n", with: "\n").utf8)
-
-            let outgoing = MEEncodedOutgoingMessage(rawData: lfEncoded, isSigned: composeContext.shouldSign, isEncrypted: composeContext.shouldEncrypt)
+            let encoded = try MessageEncoder(backend: backend).encode(Self.canonical(rawData), sender: Self.address(message.fromAddress), recipients: message.allRecipientAddresses.map(Self.address), sign: composeContext.shouldSign, encrypt: composeContext.shouldEncrypt)
+            let outgoing = MEEncodedOutgoingMessage(rawData: encoded, isSigned: composeContext.shouldSign, isEncrypted: composeContext.shouldEncrypt)
             return MEMessageEncodingResult(encodedMessage: outgoing, signingError: nil, encryptionError: nil)
         } catch {
-            let pgpError = error as? PGPError
-            let isSigningError = pgpError?.isSigningError ?? false
+            Logger.gpgMail.error("Encoding failed: \(error.localizedDescription)")
+            let isSigningError = (error as? PGPError)?.isSigningError ?? false
             return MEMessageEncodingResult(encodedMessage: nil, signingError: isSigningError ? error : nil, encryptionError: isSigningError ? nil : error)
         }
     }
@@ -64,8 +56,9 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
     nonisolated func decodedMessage(forMessageData data: Data) -> MEDecodedMessage? {
         let result: DecodedMessage?
         do {
-            result = try MessageDecoder(backend: backend).decode(data)
+            result = try MessageDecoder(backend: backend).decode(Self.canonical(data))
         } catch {
+            Logger.gpgMail.error("Decoding failed: \(error.localizedDescription)")
             let securityInformation = MEMessageSecurityInformation(signers: [], isEncrypted: false, signingError: nil, encryptionError: error)
             return MEDecodedMessage(data: data, securityInformation: securityInformation, context: nil)
         }
@@ -75,16 +68,20 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
 
         let signers = result.signatures.map(signer(for:))
         let securityInformation = MEMessageSecurityInformation(signers: signers, isEncrypted: result.isEncrypted, signingError: result.signingError, encryptionError: nil)
+        return MEDecodedMessage(data: result.data, securityInformation: securityInformation, context: nil)
+    }
 
-        // TODO: Remove this hack
-        let lfData = Data(String(decoding: result.data, as: UTF8.self).replacingOccurrences(of: "\r\n", with: "\n").utf8)
-
-        return MEDecodedMessage(data: lfData, securityInformation: securityInformation, context: nil)
+    /// The one place line endings are adapted at the MailKit edge: the core works in canonical CRLF and returns CRLF.
+    ///
+    /// What Mail 27 passes to `encode` and `decodedMessage` hasn't been captured, so this accepts LF-only, CRLF and
+    /// mixed input and never double-converts. Verified by the end-to-end Mail test (plan step 6).
+    private nonisolated static func canonical(_ data: Data) -> Data {
+        Mime.canonicalCRLF(data)
     }
 
     /// Mail's view of a signature. The core `Signature` rides along as JSON in the context for the details view.
     private nonisolated func signer(for signature: Signature) -> MEMessageSigner {
-        var emails = (signature.primaryKeyFingerprint ?? signature.fingerprint).map(backend.keys.emails(forFingerprint:)) ?? []
+        var emails = (signature.primaryKeyFingerprint ?? signature.fingerprint).map(backend.keys.directory.emails(forFingerprint:)) ?? []
         if emails.isEmpty, let email = signature.signerEmail {
             emails = [email]
         }

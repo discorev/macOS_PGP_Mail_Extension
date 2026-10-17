@@ -51,11 +51,11 @@ final class LibmacgpgBackend: PGPBackend {
     }
 
     func signingKey(for email: String) -> PGPKey? {
-        keys.signingKey(for: email).map(PGPKey.init)
+        keys.directory.signingKey(for: email)
     }
 
     func encryptionKey(for email: String) -> PGPKey? {
-        keys.encryptionKey(for: email).map(PGPKey.init)
+        keys.directory.encryptionKey(for: email)
     }
 
     /// Run gpg. Libmacgpg adds `--status-fd` itself and collects the lines in `statusText`.
