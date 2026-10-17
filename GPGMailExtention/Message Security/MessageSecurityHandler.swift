@@ -116,18 +116,18 @@ nonisolated final class MessageSecurityHandler: NSObject, MEMessageSecurityHandl
     @MainActor func extensionViewController(signers messageSigners: [MEMessageSigner]) -> MEExtensionViewController? {
         let decoder = JSONDecoder()
         let signatures = messageSigners.compactMap { try? decoder.decode(Signature.self, from: $0.context) }
-        guard !signatures.isEmpty else {
-            return nil
-        }
+        Logger.gpgMail.notice("Signature panel requested: \(messageSigners.count, privacy: .public) signer(s), \(signatures.count, privacy: .public) readable")
         let details = signatures.map { signature in
             SignatureDetails(signature: signature, keyExpires: (signature.primaryKeyFingerprint ?? signature.fingerprint).flatMap(backend.keys.expirationDate(forFingerprint:)))
         }
         return MessageSecurityViewController(signatures: details)
     }
 
-    /// Decoded messages don't carry a message context, so there's no banner view to show
+    /// Decoded messages don't carry a message context, so there's nothing to show. Mail still asks when the
+    /// extension icon is clicked, and hangs on an empty sheet if it gets nil back, so return the empty panel.
     @MainActor func extensionViewController(messageContext context: Data) -> MEExtensionViewController? {
-        nil
+        Logger.gpgMail.notice("Message context panel requested: \(context.count, privacy: .public) bytes of context")
+        return MessageSecurityViewController(signatures: [])
     }
 
     @MainActor func primaryActionClicked(forMessageContext context: Data) async -> MEExtensionViewController? {

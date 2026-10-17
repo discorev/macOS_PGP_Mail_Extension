@@ -20,6 +20,10 @@ struct SignatureDetailsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
+            if signatures.isEmpty {
+                Text("GPGMail has no signature details for this message.")
+                    .foregroundStyle(.secondary)
+            }
             ForEach(signatures.indices, id: \.self) { index in
                 if index > 0 {
                     Divider()
