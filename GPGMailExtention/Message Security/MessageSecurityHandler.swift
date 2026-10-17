@@ -5,7 +5,7 @@
 //  Created by Oliver Hayman on 29/06/2021.
 //
 
-import MailKit
+@preconcurrency import MailKit
 
 class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
     static let shared = MessageSecurityHandler()
@@ -15,7 +15,7 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
     /// Check if a message being composed can be signed and or encrypted
     /// - Parameter message: Message to check
     /// - Returns:`MEOutgoingMessageEncodingStatus` showing if a message can be signed and or encrypted
-    func encodingStatus(for message: MEMessage, composeContext: MEComposeContext) async -> MEOutgoingMessageEncodingStatus {
+    nonisolated func encodingStatus(for message: MEMessage, composeContext: MEComposeContext) async -> MEOutgoingMessageEncodingStatus {
         var canSign = false, canEncrypt = false
         
         // Is there a valid signing key for the fromAddress?
@@ -46,7 +46,7 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
     ///   - shouldSign: Indicates if the user selected / deselect the signing option
     ///   - shouldEncrypt: Indicates if the user selected / deselected the encryption option
     /// - Returns: The result of signing / encrypting
-    func encode(_ message: MEMessage, composeContext: MEComposeContext) async -> MEMessageEncodingResult {
+    nonisolated func encode(_ message: MEMessage, composeContext: MEComposeContext) async -> MEMessageEncodingResult {
         var signingError: Error? = nil
         var encryptionError: Error? = nil
         var encodedMessage: Data? = nil
@@ -94,7 +94,7 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
     /// Decrypt encoded message and check signature
     /// - Parameter data: RFC822 message
     /// - Returns:Decoded message or nil
-    func decodedMessage(forMessageData data: Data) -> MEDecodedMessage? {
+    nonisolated func decodedMessage(forMessageData data: Data) -> MEDecodedMessage? {
         let decoder = GPGDecoder.sharedInstance
         
         guard decoder.shouldDecodeMessage(with: data) else {

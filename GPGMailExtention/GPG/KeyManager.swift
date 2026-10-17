@@ -8,10 +8,10 @@
 import Foundation
 import MailKit
 
-public class KeyManager {
+public final class KeyManager: Sendable {
     public static let sharedInstance = KeyManager()
     
-    let gpgKeyManager: GPGKeyManager = GPGKeyManager.sharedInstance()
+    var gpgKeyManager: GPGKeyManager { GPGKeyManager.sharedInstance() }
     
     func keys() -> Set<GPGKey> {
         return gpgKeyManager.allKeys as! Set<GPGKey>

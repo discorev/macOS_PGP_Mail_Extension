@@ -8,7 +8,7 @@
 import MailKit
 import Foundation
 
-class GPGDecoder {
+final class GPGDecoder: Sendable {
     static let sharedInstance = GPGDecoder()
     
     func keys() -> Set<GPGKey> {
