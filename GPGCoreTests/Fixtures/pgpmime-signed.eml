@@ -1,0 +1,27 @@
+From: GPGMail Test <ollie@ollies.email>
+To: GPGMail Test <ollie@ollies.email>
+Date: Fri, 16 Oct 2026 12:00:00 +0000
+Message-ID: <fixture-pgpmime-signed@gpgmail.test>
+Subject: pgpmime-signed
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256; protocol="application/pgp-signature"; boundary="SIGNED-PART-123456"
+
+--SIGNED-PART-123456
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed invoice notice 1042.
+Café, naïve, £5 — ✓
+--SIGNED-PART-123456
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQQXrFnMzIrDvd3MIdGr7HKkchF48gUCatNV6AAKCRCr7HKkchF4
+8nSLAQCV1Orf08hjisaus8OlCpmYOWi0LuXzKtcVMJEAEAhWvgEAjW4iVzSL4xl8
+8lntMR1SjqklgJfRaQIXxvQhExz4swM=
+=F/4S
+-----END PGP SIGNATURE-----
+--SIGNED-PART-123456--
