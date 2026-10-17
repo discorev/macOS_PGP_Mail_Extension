@@ -7,10 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0701A25226C1C073009C612B /* KeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701A25126C1C073009C612B /* KeyManager.swift */; };
-		0702823226C078D300E22970 /* GPGEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0702823126C078D300E22970 /* GPGEncoder.swift */; };
-		0702823526C09F2E00E22970 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0702823426C09F2E00E22970 /* Collection.swift */; };
-		0759D15526BB12E70029D438 /* MimeWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0759D15426BB12E70029D438 /* MimeWriter.swift */; };
+		0701A25226C1C073009C612B /* KeyIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0701A25126C1C073009C612B /* KeyIndex.swift */; };
 		07A9C664268B9FAC00333A29 /* GPGMailApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C663268B9FAC00333A29 /* GPGMailApp.swift */; };
 		07A9C666268B9FAC00333A29 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C665268B9FAC00333A29 /* ContentView.swift */; };
 		07A9C668268B9FAE00333A29 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07A9C667268B9FAE00333A29 /* Assets.xcassets */; };
@@ -24,10 +21,26 @@
 		07A9C6A4268B9FF500333A29 /* GPGMailExtention.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 07A9C68F268B9FF500333A29 /* GPGMailExtention.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		07A9C6AB268BAB0D00333A29 /* MailKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A9C6AA268BAB0D00333A29 /* MailKit.framework */; platformFilter = maccatalyst; };
 		07A9C6B4268FA1D000333A29 /* Libmacgpg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A9C6B3268FA1D000333A29 /* Libmacgpg.framework */; };
-		07A9C6C12690C84E00333A29 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C6C02690C84E00333A29 /* Errors.swift */; };
-		07A9C6C32690DE3700333A29 /* GPGDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C6C22690DE3700333A29 /* GPGDecoder.swift */; };
-		07A9C6C62690E46B00333A29 /* Signature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C6C52690E46B00333A29 /* Signature.swift */; };
-		07A9C6CD269104C700333A29 /* Mime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C6CC269104C700333A29 /* Mime.swift */; };
+		C0DE00000000000000000024 /* Mime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C6CC269104C700333A29 /* Mime.swift */; };
+		C0DE00000000000000000025 /* MimeWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0759D15426BB12E70029D438 /* MimeWriter.swift */; };
+		C0DE00000000000000000026 /* MimeEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000017 /* MimeEncoding.swift */; };
+		C0DE00000000000000000027 /* Signature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C6C52690E46B00333A29 /* Signature.swift */; };
+		C0DE00000000000000000028 /* PGPError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C6C02690C84E00333A29 /* PGPError.swift */; };
+		C0DE00000000000000000029 /* PGPBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000018 /* PGPBackend.swift */; };
+		C0DE0000000000000000002A /* MessageDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000019 /* MessageDecoder.swift */; };
+		C0DE0000000000000000002B /* MessageEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE0000000000000000001A /* MessageEncoder.swift */; };
+		C0DE0000000000000000002C /* GPGStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE0000000000000000001B /* GPGStatus.swift */; };
+		C0DE0000000000000000002D /* GPGRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE0000000000000000001C /* GPGRun.swift */; };
+		C0DE0000000000000000002E /* TestBackends.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE0000000000000000001D /* TestBackends.swift */; };
+		C0DE0000000000000000002F /* FixtureDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE0000000000000000001E /* FixtureDecodingTests.swift */; };
+		C0DE00000000000000000030 /* GPGStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE0000000000000000001F /* GPGStatusTests.swift */; };
+		C0DE00000000000000000031 /* MimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000020 /* MimeTests.swift */; };
+		C0DE00000000000000000032 /* MessageEncoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000021 /* MessageEncoderTests.swift */; };
+		C0DE00000000000000000033 /* Fixtures in Resources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000022 /* Fixtures */; };
+		C0DE00000000000000000034 /* LibmacgpgBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000023 /* LibmacgpgBackend.swift */; };
+		C0DE00000000000000000035 /* GPGCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000003 /* GPGCore.framework */; };
+		C0DE00000000000000000036 /* GPGCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000003 /* GPGCore.framework */; };
+		C0DE00000000000000000037 /* GPGCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000003 /* GPGCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +65,27 @@
 			remoteGlobalIDString = 07A9C68E268B9FF500333A29;
 			remoteInfo = GPGMailExtention;
 		};
+		C0DE00000000000000000038 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 07A9C658268B9FAC00333A29 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C0DE00000000000000000001;
+			remoteInfo = GPGCore;
+		};
+		C0DE0000000000000000003A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 07A9C658268B9FAC00333A29 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C0DE00000000000000000001;
+			remoteInfo = GPGCore;
+		};
+		C0DE0000000000000000003C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 07A9C658268B9FAC00333A29 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C0DE00000000000000000001;
+			remoteInfo = GPGCore;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -66,12 +100,21 @@
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C0DE00000000000000000011 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C0DE00000000000000000037 /* GPGCore.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0701A25126C1C073009C612B /* KeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyManager.swift; sourceTree = "<group>"; };
-		0702823126C078D300E22970 /* GPGEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPGEncoder.swift; sourceTree = "<group>"; };
-		0702823426C09F2E00E22970 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
+		0701A25126C1C073009C612B /* KeyIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyIndex.swift; sourceTree = "<group>"; };
 		0759D15426BB12E70029D438 /* MimeWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MimeWriter.swift; sourceTree = "<group>"; };
 		07A9C660268B9FAC00333A29 /* GPGMail.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPGMail.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07A9C663268B9FAC00333A29 /* GPGMailApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPGMailApp.swift; sourceTree = "<group>"; };
@@ -94,10 +137,24 @@
 		07A9C6B3268FA1D000333A29 /* Libmacgpg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Libmacgpg.framework; path = ../../../../Library/Frameworks/Libmacgpg.framework; sourceTree = "<group>"; };
 		07A9C6B8268FA28400333A29 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		07A9C6BA268FAA0200333A29 /* ExceptionCatcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExceptionCatcher.h; sourceTree = "<group>"; };
-		07A9C6C02690C84E00333A29 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
-		07A9C6C22690DE3700333A29 /* GPGDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPGDecoder.swift; sourceTree = "<group>"; };
+		07A9C6C02690C84E00333A29 /* PGPError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PGPError.swift; sourceTree = "<group>"; };
 		07A9C6C52690E46B00333A29 /* Signature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signature.swift; sourceTree = "<group>"; };
 		07A9C6CC269104C700333A29 /* Mime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mime.swift; sourceTree = "<group>"; };
+		C0DE00000000000000000003 /* GPGCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GPGCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C0DE00000000000000000004 /* GPGCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GPGCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C0DE00000000000000000017 /* MimeEncoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MimeEncoding.swift; sourceTree = "<group>"; };
+		C0DE00000000000000000018 /* PGPBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PGPBackend.swift; sourceTree = "<group>"; };
+		C0DE00000000000000000019 /* MessageDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDecoder.swift; sourceTree = "<group>"; };
+		C0DE0000000000000000001A /* MessageEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageEncoder.swift; sourceTree = "<group>"; };
+		C0DE0000000000000000001B /* GPGStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPGStatus.swift; sourceTree = "<group>"; };
+		C0DE0000000000000000001C /* GPGRun.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPGRun.swift; sourceTree = "<group>"; };
+		C0DE0000000000000000001D /* TestBackends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestBackends.swift; sourceTree = "<group>"; };
+		C0DE0000000000000000001E /* FixtureDecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixtureDecodingTests.swift; sourceTree = "<group>"; };
+		C0DE0000000000000000001F /* GPGStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPGStatusTests.swift; sourceTree = "<group>"; };
+		C0DE00000000000000000020 /* MimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MimeTests.swift; sourceTree = "<group>"; };
+		C0DE00000000000000000021 /* MessageEncoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageEncoderTests.swift; sourceTree = "<group>"; };
+		C0DE00000000000000000023 /* LibmacgpgBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibmacgpgBackend.swift; sourceTree = "<group>"; };
+		C0DE00000000000000000022 /* Fixtures */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Fixtures; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,24 +185,34 @@
 			files = (
 				07A9C6AB268BAB0D00333A29 /* MailKit.framework in Frameworks */,
 				07A9C6B4268FA1D000333A29 /* Libmacgpg.framework in Frameworks */,
+				C0DE00000000000000000035 /* GPGCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C0DE0000000000000000000C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C0DE0000000000000000000F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0DE00000000000000000036 /* GPGCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0702823326C09F1900E22970 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				0702823426C09F2E00E22970 /* Collection.swift */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
 		07A9C657268B9FAC00333A29 = {
 			isa = PBXGroup;
 			children = (
 				07A9C662268B9FAC00333A29 /* GPGMail */,
+				C0DE00000000000000000012 /* GPGCore */,
+				C0DE00000000000000000016 /* GPGCoreTests */,
 				07A9C673268B9FAE00333A29 /* GPGMailTests */,
 				07A9C67D268B9FAE00333A29 /* GPGMailUITests */,
 				07A9C690268B9FF500333A29 /* GPGMailExtention */,
@@ -161,6 +228,8 @@
 				07A9C670268B9FAE00333A29 /* GPGMailTests.xctest */,
 				07A9C67A268B9FAE00333A29 /* GPGMailUITests.xctest */,
 				07A9C68F268B9FF500333A29 /* GPGMailExtention.appex */,
+				C0DE00000000000000000003 /* GPGCore.framework */,
+				C0DE00000000000000000004 /* GPGCoreTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -204,8 +273,6 @@
 		07A9C690268B9FF500333A29 /* GPGMailExtention */ = {
 			isa = PBXGroup;
 			children = (
-				0702823326C09F1900E22970 /* Extensions */,
-				07A9C6CB269104BA00333A29 /* Mime */,
 				07A9C6BB2690AF6500333A29 /* GPG */,
 				07A9C6AC268BAE4900333A29 /* GPGMailExtention.entitlements */,
 				07A9C691268B9FF500333A29 /* MailExtension.swift */,
@@ -229,11 +296,8 @@
 		07A9C6BB2690AF6500333A29 /* GPG */ = {
 			isa = PBXGroup;
 			children = (
-				07A9C6C02690C84E00333A29 /* Errors.swift */,
-				07A9C6C22690DE3700333A29 /* GPGDecoder.swift */,
-				07A9C6C52690E46B00333A29 /* Signature.swift */,
-				0702823126C078D300E22970 /* GPGEncoder.swift */,
-				0701A25126C1C073009C612B /* KeyManager.swift */,
+				0701A25126C1C073009C612B /* KeyIndex.swift */,
+				C0DE00000000000000000023 /* LibmacgpgBackend.swift */,
 			);
 			path = GPG;
 			sourceTree = "<group>";
@@ -248,13 +312,58 @@
 			path = "Message Security";
 			sourceTree = "<group>";
 		};
-		07A9C6CB269104BA00333A29 /* Mime */ = {
+		C0DE00000000000000000012 /* GPGCore */ = {
+			isa = PBXGroup;
+			children = (
+				C0DE00000000000000000013 /* Mime */,
+				C0DE00000000000000000014 /* PGP */,
+				C0DE00000000000000000015 /* GPG */,
+			);
+			path = GPGCore;
+			sourceTree = "<group>";
+		};
+		C0DE00000000000000000013 /* Mime */ = {
 			isa = PBXGroup;
 			children = (
 				07A9C6CC269104C700333A29 /* Mime.swift */,
 				0759D15426BB12E70029D438 /* MimeWriter.swift */,
+				C0DE00000000000000000017 /* MimeEncoding.swift */,
 			);
 			path = Mime;
+			sourceTree = "<group>";
+		};
+		C0DE00000000000000000014 /* PGP */ = {
+			isa = PBXGroup;
+			children = (
+				07A9C6C52690E46B00333A29 /* Signature.swift */,
+				07A9C6C02690C84E00333A29 /* PGPError.swift */,
+				C0DE00000000000000000018 /* PGPBackend.swift */,
+				C0DE00000000000000000019 /* MessageDecoder.swift */,
+				C0DE0000000000000000001A /* MessageEncoder.swift */,
+			);
+			path = PGP;
+			sourceTree = "<group>";
+		};
+		C0DE00000000000000000015 /* GPG */ = {
+			isa = PBXGroup;
+			children = (
+				C0DE0000000000000000001B /* GPGStatus.swift */,
+				C0DE0000000000000000001C /* GPGRun.swift */,
+			);
+			path = GPG;
+			sourceTree = "<group>";
+		};
+		C0DE00000000000000000016 /* GPGCoreTests */ = {
+			isa = PBXGroup;
+			children = (
+				C0DE00000000000000000022 /* Fixtures */,
+				C0DE0000000000000000001D /* TestBackends.swift */,
+				C0DE0000000000000000001E /* FixtureDecodingTests.swift */,
+				C0DE0000000000000000001F /* GPGStatusTests.swift */,
+				C0DE00000000000000000020 /* MimeTests.swift */,
+				C0DE00000000000000000021 /* MessageEncoderTests.swift */,
+			);
+			path = GPGCoreTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -268,11 +377,13 @@
 				07A9C65D268B9FAC00333A29 /* Frameworks */,
 				07A9C65E268B9FAC00333A29 /* Resources */,
 				07A9C6A8268B9FF500333A29 /* Embed App Extensions */,
+				C0DE00000000000000000011 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				07A9C6A3268B9FF500333A29 /* PBXTargetDependency */,
+				C0DE00000000000000000039 /* PBXTargetDependency */,
 			);
 			name = GPGMail;
 			productName = GPGMail;
@@ -326,6 +437,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				C0DE0000000000000000003B /* PBXTargetDependency */,
 			);
 			name = GPGMailExtention;
 			packageProductDependencies = (
@@ -333,6 +445,41 @@
 			productName = GPGMailExtention;
 			productReference = 07A9C68F268B9FF500333A29 /* GPGMailExtention.appex */;
 			productType = "com.apple.product-type.app-extension";
+		};
+		C0DE00000000000000000001 /* GPGCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C0DE00000000000000000005 /* Build configuration list for PBXNativeTarget "GPGCore" */;
+			buildPhases = (
+				C0DE0000000000000000000B /* Sources */,
+				C0DE0000000000000000000C /* Frameworks */,
+				C0DE0000000000000000000D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GPGCore;
+			productName = GPGCore;
+			productReference = C0DE00000000000000000003 /* GPGCore.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		C0DE00000000000000000002 /* GPGCoreTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C0DE00000000000000000006 /* Build configuration list for PBXNativeTarget "GPGCoreTests" */;
+			buildPhases = (
+				C0DE0000000000000000000E /* Sources */,
+				C0DE0000000000000000000F /* Frameworks */,
+				C0DE00000000000000000010 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C0DE0000000000000000003D /* PBXTargetDependency */,
+			);
+			name = GPGCoreTests;
+			productName = GPGCoreTests;
+			productReference = C0DE00000000000000000004 /* GPGCoreTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -358,6 +505,12 @@
 					07A9C68E268B9FF500333A29 = {
 						CreatedOnToolsVersion = 13.0;
 					};
+					C0DE00000000000000000001 = {
+						CreatedOnToolsVersion = 27.0;
+					};
+					C0DE00000000000000000002 = {
+						CreatedOnToolsVersion = 27.0;
+					};
 				};
 			};
 			buildConfigurationList = 07A9C65B268B9FAC00333A29 /* Build configuration list for PBXProject "GPGMail" */;
@@ -379,6 +532,8 @@
 				07A9C66F268B9FAE00333A29 /* GPGMailTests */,
 				07A9C679268B9FAE00333A29 /* GPGMailUITests */,
 				07A9C68E268B9FF500333A29 /* GPGMailExtention */,
+				C0DE00000000000000000001 /* GPGCore */,
+				C0DE00000000000000000002 /* GPGCoreTests */,
 			);
 		};
 /* End PBXProject section */
@@ -415,6 +570,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C0DE0000000000000000000D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C0DE00000000000000000010 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0DE00000000000000000033 /* Fixtures in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -447,17 +617,40 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0759D15526BB12E70029D438 /* MimeWriter.swift in Sources */,
-				0702823526C09F2E00E22970 /* Collection.swift in Sources */,
-				0702823226C078D300E22970 /* GPGEncoder.swift in Sources */,
-				0701A25226C1C073009C612B /* KeyManager.swift in Sources */,
-				07A9C6C62690E46B00333A29 /* Signature.swift in Sources */,
+				0701A25226C1C073009C612B /* KeyIndex.swift in Sources */,
+				C0DE00000000000000000034 /* LibmacgpgBackend.swift in Sources */,
 				07A9C69C268B9FF500333A29 /* MessageSecurityHandler.swift in Sources */,
 				07A9C69E268B9FF500333A29 /* MessageSecurityViewController.swift in Sources */,
 				07A9C692268B9FF500333A29 /* MailExtension.swift in Sources */,
-				07A9C6CD269104C700333A29 /* Mime.swift in Sources */,
-				07A9C6C12690C84E00333A29 /* Errors.swift in Sources */,
-				07A9C6C32690DE3700333A29 /* GPGDecoder.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C0DE0000000000000000000B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0DE00000000000000000024 /* Mime.swift in Sources */,
+				C0DE00000000000000000025 /* MimeWriter.swift in Sources */,
+				C0DE00000000000000000026 /* MimeEncoding.swift in Sources */,
+				C0DE00000000000000000027 /* Signature.swift in Sources */,
+				C0DE00000000000000000028 /* PGPError.swift in Sources */,
+				C0DE00000000000000000029 /* PGPBackend.swift in Sources */,
+				C0DE0000000000000000002A /* MessageDecoder.swift in Sources */,
+				C0DE0000000000000000002B /* MessageEncoder.swift in Sources */,
+				C0DE0000000000000000002C /* GPGStatus.swift in Sources */,
+				C0DE0000000000000000002D /* GPGRun.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C0DE0000000000000000000E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0DE0000000000000000002E /* TestBackends.swift in Sources */,
+				C0DE0000000000000000002F /* FixtureDecodingTests.swift in Sources */,
+				C0DE00000000000000000030 /* GPGStatusTests.swift in Sources */,
+				C0DE00000000000000000031 /* MimeTests.swift in Sources */,
+				C0DE00000000000000000032 /* MessageEncoderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -478,6 +671,21 @@
 			isa = PBXTargetDependency;
 			target = 07A9C68E268B9FF500333A29 /* GPGMailExtention */;
 			targetProxy = 07A9C6A2268B9FF500333A29 /* PBXContainerItemProxy */;
+		};
+		C0DE00000000000000000039 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C0DE00000000000000000001 /* GPGCore */;
+			targetProxy = C0DE00000000000000000038 /* PBXContainerItemProxy */;
+		};
+		C0DE0000000000000000003B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C0DE00000000000000000001 /* GPGCore */;
+			targetProxy = C0DE0000000000000000003A /* PBXContainerItemProxy */;
+		};
+		C0DE0000000000000000003D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C0DE00000000000000000001 /* GPGCore */;
+			targetProxy = C0DE0000000000000000003C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -847,6 +1055,100 @@
 			};
 			name = Release;
 		};
+		C0DE00000000000000000007 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D6AAJCLH87;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.olliespage.GPGCore;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 6.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		C0DE00000000000000000008 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D6AAJCLH87;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.olliespage.GPGCore;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 6.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		C0DE00000000000000000009 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D6AAJCLH87;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.olliespage.GPGCoreTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		C0DE0000000000000000000A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D6AAJCLH87;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.olliespage.GPGCoreTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -891,6 +1193,24 @@
 			buildConfigurations = (
 				07A9C6A6268B9FF500333A29 /* Debug */,
 				07A9C6A7268B9FF500333A29 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C0DE00000000000000000005 /* Build configuration list for PBXNativeTarget "GPGCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C0DE00000000000000000007 /* Debug */,
+				C0DE00000000000000000008 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C0DE00000000000000000006 /* Build configuration list for PBXNativeTarget "GPGCoreTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C0DE00000000000000000009 /* Debug */,
+				C0DE0000000000000000000A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

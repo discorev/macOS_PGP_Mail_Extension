@@ -134,7 +134,8 @@ make_signed_eml() {
     printf 'MIME-Version: 1.0\r\nContent-Type: multipart/signed; micalg=pgp-sha256; protocol="application/pgp-signature"; boundary="SIGNED-PART-123456"\r\n\r\n'
     printf '%s\r\n' '--SIGNED-PART-123456'
     cat "$part"
-    printf '%s\r\n' '--SIGNED-PART-123456'
+    # This CRLF belongs to the delimiter (RFC 2046), so the signed bytes are exactly "$part".
+    printf '\r\n%s\r\n' '--SIGNED-PART-123456'
     printf 'Content-Type: application/pgp-signature; name="signature.asc"\r\nContent-Description: OpenPGP digital signature\r\nContent-Disposition: attachment; filename="signature.asc"\r\n\r\n'
     crlf "$WORK/signature.asc"
     printf '%s--\r\n' '--SIGNED-PART-123456'
@@ -145,12 +146,12 @@ cp "$WORK/signed-part" "$WORK/signed-part-bad"
 perl -0777 -i -pe 's/notice 1042/notice 1043/' "$WORK/signed-part-bad"
 make_signed_eml pgpmime-signed-bad "$WORK/signed-part-bad"
 
-# Detached verification uses the exact first-part bytes extracted before the boundary.
+# Detached verification uses the first part's bytes up to, but not including, the CRLF before the next delimiter (RFC 3156).
 for stem in pgpmime-signed pgpmime-signed-bad; do
   rc=0
   if [[ "$stem" == pgpmime-signed ]]; then part="$WORK/signed-part"; else part="$WORK/signed-part-bad"; fi
   "$GPG" --batch --no-auto-key-retrieve --status-fd=3 --verify "$WORK/signature.asc" "$part" \
-    > "$OUT/$stem.decrypted" 3> "$OUT/$stem.status" || rc=$?
+    > /dev/null 3> "$OUT/$stem.status" || rc=$?
   printf '%s\n' "${rc:-0}" > "$OUT/$stem.exit"
   unset rc
 done

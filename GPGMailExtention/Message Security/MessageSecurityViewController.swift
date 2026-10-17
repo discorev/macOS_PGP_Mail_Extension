@@ -6,6 +6,7 @@
 //
 
 import MailKit
+import GPGCore
 
 class MessageSecurityViewController: MEExtensionViewController {
     
@@ -19,7 +20,7 @@ class MessageSecurityViewController: MEExtensionViewController {
         // Do view setup here.
         if let signers = signers {
             for signer in signers {
-                let signature = try? decoder.decode(ValidSignature.self, from: signer.context)
+                let signature = try? decoder.decode(Signature.self, from: signer.context)
                 print("signature: \(String(describing: signature))")
             }
         }
