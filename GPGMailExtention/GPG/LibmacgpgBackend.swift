@@ -40,7 +40,9 @@ final class LibmacgpgBackend: PGPBackend {
     }
 
     func encrypt(_ data: Data, to recipients: [PGPKey], signedBy signer: PGPKey?) throws -> Data {
-        var arguments = ["--armor", "--encrypt"]
+        // Encrypt to any usable key in the keyring, certified or not: importing the key is the deliberate step.
+        // Without this gpg refuses uncertified keys at send time, after Mail has already offered encryption.
+        var arguments = ["--armor", "--encrypt", "--trust-model", "always"]
         for recipient in recipients {
             arguments += ["--recipient", recipient.fingerprint]
         }
