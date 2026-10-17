@@ -94,19 +94,26 @@ class MessageSecurityHandler: NSObject, MEMessageSecurityHandler {
     }
 
     // MARK: - Displaying Security Information
+
+    /// The details panel for the signed badge. Each signer carries its core `Signature` as JSON.
     func extensionViewController(signers messageSigners: [MEMessageSigner]) -> MEExtensionViewController? {
-        let controller = MessageSecurityViewController.sharedInstance
-        controller.signers = messageSigners
-        return controller
+        let decoder = JSONDecoder()
+        let signatures = messageSigners.compactMap { try? decoder.decode(Signature.self, from: $0.context) }
+        guard !signatures.isEmpty else {
+            return nil
+        }
+        let details = signatures.map { signature in
+            SignatureDetails(signature: signature, keyExpires: (signature.primaryKeyFingerprint ?? signature.fingerprint).flatMap(backend.keys.expirationDate(forFingerprint:)))
+        }
+        return MessageSecurityViewController(signatures: details)
     }
 
+    /// Decoded messages don't carry a message context, so there's no banner view to show
     func extensionViewController(messageContext context: Data) -> MEExtensionViewController? {
-        let controller = MessageSecurityViewController.sharedInstance
-        // controller.signers = messageSigners
-        return controller
+        nil
     }
 
     func primaryActionClicked(forMessageContext context: Data) async -> MEExtensionViewController? {
-        return nil
+        nil
     }
 }

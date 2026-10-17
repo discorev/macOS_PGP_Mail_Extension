@@ -33,6 +33,15 @@ final class KeyIndex: Sendable {
         }
     }
 
+    /// When the key that owns `fingerprint` (a primary key or one of its subkeys) expires, or nil if it never does
+    func expirationDate(forFingerprint fingerprint: String) -> Date? {
+        let keys = GPGKeyManager.sharedInstance()?.allKeys as? Set<GPGKey> ?? []
+        let key = keys.first { key in
+            key.fingerprint == fingerprint || (key.subkeys as? [GPGKey] ?? []).contains { $0.fingerprint == fingerprint }
+        }
+        return key?.expirationDate
+    }
+
     private static func keyringKey(_ key: GPGKey) -> KeyringKey? {
         guard let fingerprint = key.fingerprint else {
             return nil

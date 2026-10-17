@@ -10,8 +10,9 @@ import SwiftUI
 @main
 struct GPGMailApp: App {
     var body: some Scene {
-        WindowGroup {
+        Window("GPGMail", id: "setup") {
             ContentView()
         }
+        .windowResizability(.contentSize)
     }
 }

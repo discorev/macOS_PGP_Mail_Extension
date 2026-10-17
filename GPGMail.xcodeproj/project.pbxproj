@@ -17,7 +17,6 @@
 		07A9C692268B9FF500333A29 /* MailExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C691268B9FF500333A29 /* MailExtension.swift */; };
 		07A9C69C268B9FF500333A29 /* MessageSecurityHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C69B268B9FF500333A29 /* MessageSecurityHandler.swift */; };
 		07A9C69E268B9FF500333A29 /* MessageSecurityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A9C69D268B9FF500333A29 /* MessageSecurityViewController.swift */; };
-		07A9C6A0268B9FF500333A29 /* MessageSecurityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07A9C69F268B9FF500333A29 /* MessageSecurityViewController.xib */; };
 		07A9C6A4268B9FF500333A29 /* GPGMailExtention.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 07A9C68F268B9FF500333A29 /* GPGMailExtention.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		07A9C6AB268BAB0D00333A29 /* MailKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A9C6AA268BAB0D00333A29 /* MailKit.framework */; platformFilter = maccatalyst; };
 		07A9C6B4268FA1D000333A29 /* Libmacgpg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A9C6B3268FA1D000333A29 /* Libmacgpg.framework */; };
@@ -44,6 +43,9 @@
 		C0DE00000000000000000041 /* KeyDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000040 /* KeyDirectory.swift */; };
 		C0DE00000000000000000043 /* KeyDirectoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000042 /* KeyDirectoryTests.swift */; };
 		C0DE00000000000000000045 /* LineEndingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000044 /* LineEndingTests.swift */; };
+		5E1F00000000000000000002 /* SignatureDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1F00000000000000000001 /* SignatureDescription.swift */; };
+		5E1F00000000000000000004 /* SignatureDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1F00000000000000000003 /* SignatureDetailsView.swift */; };
+		5E1F00000000000000000008 /* SignatureDescriptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1F00000000000000000007 /* SignatureDescriptionTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -132,7 +134,6 @@
 		07A9C691268B9FF500333A29 /* MailExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailExtension.swift; sourceTree = "<group>"; };
 		07A9C69B268B9FF500333A29 /* MessageSecurityHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSecurityHandler.swift; sourceTree = "<group>"; };
 		07A9C69D268B9FF500333A29 /* MessageSecurityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSecurityViewController.swift; sourceTree = "<group>"; };
-		07A9C69F268B9FF500333A29 /* MessageSecurityViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MessageSecurityViewController.xib; sourceTree = "<group>"; };
 		07A9C6A1268B9FF500333A29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		07A9C6AA268BAB0D00333A29 /* MailKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MailKit.framework; path = System/Library/Frameworks/MailKit.framework; sourceTree = SDKROOT; };
 		07A9C6AC268BAE4900333A29 /* GPGMailExtention.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GPGMailExtention.entitlements; sourceTree = "<group>"; };
@@ -161,6 +162,9 @@
 		C0DE00000000000000000040 /* KeyDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyDirectory.swift; sourceTree = "<group>"; };
 		C0DE00000000000000000042 /* KeyDirectoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyDirectoryTests.swift; sourceTree = "<group>"; };
 		C0DE00000000000000000044 /* LineEndingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineEndingTests.swift; sourceTree = "<group>"; };
+		5E1F00000000000000000001 /* SignatureDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureDescription.swift; sourceTree = "<group>"; };
+		5E1F00000000000000000003 /* SignatureDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureDetailsView.swift; sourceTree = "<group>"; };
+		5E1F00000000000000000007 /* SignatureDescriptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureDescriptionTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -313,7 +317,7 @@
 			children = (
 				07A9C69B268B9FF500333A29 /* MessageSecurityHandler.swift */,
 				07A9C69D268B9FF500333A29 /* MessageSecurityViewController.swift */,
-				07A9C69F268B9FF500333A29 /* MessageSecurityViewController.xib */,
+				5E1F00000000000000000003 /* SignatureDetailsView.swift */,
 			);
 			path = "Message Security";
 			sourceTree = "<group>";
@@ -342,6 +346,7 @@
 			isa = PBXGroup;
 			children = (
 				07A9C6C52690E46B00333A29 /* Signature.swift */,
+				5E1F00000000000000000001 /* SignatureDescription.swift */,
 				07A9C6C02690C84E00333A29 /* PGPError.swift */,
 				C0DE00000000000000000018 /* PGPBackend.swift */,
 				C0DE00000000000000000019 /* MessageDecoder.swift */,
@@ -371,6 +376,7 @@
 				C0DE00000000000000000021 /* MessageEncoderTests.swift */,
 				C0DE00000000000000000042 /* KeyDirectoryTests.swift */,
 				C0DE00000000000000000044 /* LineEndingTests.swift */,
+				5E1F00000000000000000007 /* SignatureDescriptionTests.swift */,
 			);
 			path = GPGCoreTests;
 			sourceTree = "<group>";
@@ -575,7 +581,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				07A9C6A0268B9FF500333A29 /* MessageSecurityViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -630,6 +635,7 @@
 				C0DE00000000000000000034 /* LibmacgpgBackend.swift in Sources */,
 				07A9C69C268B9FF500333A29 /* MessageSecurityHandler.swift in Sources */,
 				07A9C69E268B9FF500333A29 /* MessageSecurityViewController.swift in Sources */,
+				5E1F00000000000000000004 /* SignatureDetailsView.swift in Sources */,
 				07A9C692268B9FF500333A29 /* MailExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -642,6 +648,7 @@
 				C0DE00000000000000000025 /* MimeWriter.swift in Sources */,
 				C0DE00000000000000000026 /* MimeEncoding.swift in Sources */,
 				C0DE00000000000000000027 /* Signature.swift in Sources */,
+				5E1F00000000000000000002 /* SignatureDescription.swift in Sources */,
 				C0DE00000000000000000028 /* PGPError.swift in Sources */,
 				C0DE00000000000000000029 /* PGPBackend.swift in Sources */,
 				C0DE0000000000000000002A /* MessageDecoder.swift in Sources */,
@@ -663,6 +670,7 @@
 				C0DE00000000000000000032 /* MessageEncoderTests.swift in Sources */,
 				C0DE00000000000000000043 /* KeyDirectoryTests.swift in Sources */,
 				C0DE00000000000000000045 /* LineEndingTests.swift in Sources */,
+				5E1F00000000000000000008 /* SignatureDescriptionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
