@@ -38,9 +38,11 @@ nonisolated final class MessageSecurityHandler: NSObject, MEMessageSecurityHandl
             return MEMessageEncodingResult(encodedMessage: nil, signingError: nil, encryptionError: nil)
         }
 
+        let data = Self.canonical(rawData)
+        let sign = composeContext.shouldSign && !MessageEncoder.isDraft(data)
         do {
-            let encoded = try MessageEncoder(backend: backend).encode(Self.canonical(rawData), sender: Self.address(message.fromAddress), recipients: message.allRecipientAddresses.map(Self.address), sign: composeContext.shouldSign, encrypt: composeContext.shouldEncrypt)
-            let outgoing = MEEncodedOutgoingMessage(rawData: Self.forMail(encoded), isSigned: composeContext.shouldSign, isEncrypted: composeContext.shouldEncrypt)
+            let encoded = try MessageEncoder(backend: backend).encode(data, sender: Self.address(message.fromAddress), recipients: message.allRecipientAddresses.map(Self.address), sign: sign, encrypt: composeContext.shouldEncrypt)
+            let outgoing = MEEncodedOutgoingMessage(rawData: Self.forMail(encoded), isSigned: sign, isEncrypted: composeContext.shouldEncrypt)
             return MEMessageEncodingResult(encodedMessage: outgoing, signingError: nil, encryptionError: nil)
         } catch {
             Logger.gpgMail.error("Encoding failed: \(error.localizedDescription)")

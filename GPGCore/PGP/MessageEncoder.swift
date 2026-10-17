@@ -29,6 +29,14 @@ public struct MessageEncoder: Sendable {
         return Status(canSign: backend.signingKey(for: sender) != nil, canEncrypt: canEncrypt, addressesFailingEncryption: canEncrypt ? failing : [])
     }
 
+    /// Whether Mail is saving a draft rather than sending, which it marks with this header.
+    ///
+    /// Drafts are not signed: Mail cannot show a signed draft (macOS 27 crashes in its certificate banner), and
+    /// signing on every autosave would ask for the passphrase. The final message is signed when it is sent.
+    public static func isDraft(_ message: Data) -> Bool {
+        Mime.Part(from: message).headers["X-Uniform-Type-Identifier"]?.trimmingCharacters(in: .whitespaces).caseInsensitiveCompare("com.apple.mail-draft") == .orderedSame
+    }
+
     /// Sign and/or encrypt a message.
     ///
     /// Signing alone produces multipart/signed. Encrypting produces multipart/encrypted, signed inside the

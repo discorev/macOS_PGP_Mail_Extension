@@ -152,6 +152,12 @@ struct MessageEncoderTests {
         #expect(try MessageEncoder(backend: stub()).encode(Self.message, sender: Self.sender, recipients: [], sign: false, encrypt: false) == Self.message)
     }
 
+    @Test func draftsAreRecognisedByMailsHeader() {
+        let draft = Data("X-Uniform-Type-Identifier: com.apple.mail-draft\r\n".utf8) + Self.message
+        #expect(MessageEncoder.isDraft(draft))
+        #expect(!MessageEncoder.isDraft(Self.message))
+    }
+
     @Test func encodingStatus() {
         let encoder = MessageEncoder(backend: stub())
         #expect(encoder.status(sender: Self.sender, recipients: [Self.recipient]) == .init(canSign: true, canEncrypt: true, addressesFailingEncryption: []))
