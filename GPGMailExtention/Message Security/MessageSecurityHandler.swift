@@ -9,6 +9,7 @@
 import GPGCore
 import os
 
+
 /// The MailKit shell: maps Mail's types to and from GPGCore, which does the actual work.
 nonisolated final class MessageSecurityHandler: NSObject, MEMessageSecurityHandler, Sendable {
     static let shared = MessageSecurityHandler()
@@ -39,7 +40,7 @@ nonisolated final class MessageSecurityHandler: NSObject, MEMessageSecurityHandl
 
         do {
             let encoded = try MessageEncoder(backend: backend).encode(Self.canonical(rawData), sender: Self.address(message.fromAddress), recipients: message.allRecipientAddresses.map(Self.address), sign: composeContext.shouldSign, encrypt: composeContext.shouldEncrypt)
-            let outgoing = MEEncodedOutgoingMessage(rawData: encoded, isSigned: composeContext.shouldSign, isEncrypted: composeContext.shouldEncrypt)
+            let outgoing = MEEncodedOutgoingMessage(rawData: Self.forMail(encoded), isSigned: composeContext.shouldSign, isEncrypted: composeContext.shouldEncrypt)
             return MEMessageEncodingResult(encodedMessage: outgoing, signingError: nil, encryptionError: nil)
         } catch {
             Logger.gpgMail.error("Encoding failed: \(error.localizedDescription)")
@@ -68,15 +69,27 @@ nonisolated final class MessageSecurityHandler: NSObject, MEMessageSecurityHandl
 
         let signers = result.signatures.map(signer(for:))
         let securityInformation = MEMessageSecurityInformation(signers: signers, isEncrypted: result.isEncrypted, signingError: result.signingError, encryptionError: nil)
-        return MEDecodedMessage(data: result.data, securityInformation: securityInformation, context: nil)
+        return MEDecodedMessage(data: Self.forMail(result.data), securityInformation: securityInformation, context: nil)
     }
 
-    /// The one place line endings are adapted at the MailKit edge: the core works in canonical CRLF and returns CRLF.
+    /// Line endings are adapted only here, at the MailKit edge. The core works in canonical CRLF.
     ///
-    /// What Mail 27 passes to `encode` and `decodedMessage` hasn't been captured, so this accepts LF-only, CRLF and
-    /// mixed input and never double-converts. Verified by the end-to-end Mail test (plan step 6).
+    /// Mail 27 hands the extension CRLF, but shows "no content" for decoded messages returned with CRLF, so data
+    /// going back to Mail is converted to bare LF (as the original 2021 code did). Mail restores CRLF when sending.
     private static func canonical(_ data: Data) -> Data {
         Mime.canonicalCRLF(data)
+    }
+
+    private static func forMail(_ data: Data) -> Data {
+        var result = Data(capacity: data.count)
+        var bytes = data.makeIterator()
+        var pending = bytes.next()
+        while let byte = pending {
+            pending = bytes.next()
+            if byte == 0x0D && pending == 0x0A { continue }
+            result.append(byte)
+        }
+        return result
     }
 
     /// Mail's view of a signature. The core `Signature` rides along as JSON in the context for the details view.
